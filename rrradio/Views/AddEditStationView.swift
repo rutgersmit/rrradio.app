@@ -1,0 +1,164 @@
+import SwiftUI
+import UniformTypeIdentifiers
+
+struct AddEditStationView: View {
+    @Environment(\.dismiss) private var dismiss
+
+    var existing: RadioStation?
+    var onSave: (RadioStation) -> Void
+
+    @State private var name: String = ""
+    @State private var streamURL: String = ""
+    @State private var localImageData: Data? = nil
+
+    @State private var pickedImage: NSImage? = nil
+    @State private var showCrop = false
+
+    enum Field { case name }
+    @FocusState private var focusedField: Field?
+
+    var isEditing: Bool { existing != nil }
+
+    var body: some View {
+        VStack(spacing: 0) {
+            // Header
+            HStack {
+                Text(isEditing ? "Edit Station" : "Add Station")
+                    .font(.headline)
+                Spacer()
+                Button(action: { dismiss() }) {
+                    Image(systemName: "xmark.circle.fill")
+                        .foregroundColor(.rrSecondaryText)
+                        .font(.title3)
+                }
+                .buttonStyle(.plain)
+                .focusable(false)
+            }
+            .padding()
+
+            Divider()
+
+            Form {
+                Section {
+                    TextField("Name", text: $name)
+                        .focused($focusedField, equals: .name)
+                    TextField("Stream URL", text: $streamURL)
+                }
+
+                Section("Image") {
+                    if let data = localImageData, let img = NSImage(data: data) {
+                        HStack(spacing: 10) {
+                            Image(nsImage: img)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 44, height: 44)
+                                .clipShape(RoundedRectangle(cornerRadius: 6))
+                                .clipped()
+
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Custom image")
+                                    .font(.system(size: 13))
+                                    .foregroundColor(.rrPrimaryText)
+                                Button("Remove") { localImageData = nil }
+                                    .buttonStyle(.plain)
+                                    .font(.system(size: 12))
+                                    .foregroundColor(.red)
+                            }
+
+                            Spacer()
+
+                            Button("Change") { pickImage() }
+                                .buttonStyle(.plain)
+                                .font(.system(size: 12))
+                                .foregroundColor(.rrAccent)
+                        }
+                    } else {
+                        Button("Choose image…") { pickImage() }
+                    }
+                }
+
+                // Preview
+                if let data = localImageData, let img = NSImage(data: data) {
+                    Section("Preview") {
+                        HStack {
+                            Image(nsImage: img)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 60, height: 60)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                                .clipped()
+
+                            Text(name.isEmpty ? "Station name" : name)
+                                .font(.headline)
+                                .foregroundColor(name.isEmpty ? .rrSecondaryText : .rrPrimaryText)
+                        }
+                    }
+                }
+            }
+            .formStyle(.grouped)
+
+            Divider()
+
+            HStack {
+                Spacer()
+                Button("Cancel") { dismiss() }
+                    .keyboardShortcut(.cancelAction)
+
+                Button(isEditing ? "Save" : "Add") {
+                    let station = RadioStation(
+                        id: existing?.id ?? UUID(),
+                        name: name.trimmingCharacters(in: .whitespaces),
+                        streamURL: streamURL.trimmingCharacters(in: .whitespaces),
+                        imageURL: existing?.imageURL ?? "",
+                        localImageData: localImageData,
+                        isDefault: existing?.isDefault ?? false
+                    )
+                    onSave(station)
+                    dismiss()
+                }
+                .keyboardShortcut(.defaultAction)
+                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty ||
+                          streamURL.trimmingCharacters(in: .whitespaces).isEmpty)
+            }
+            .padding()
+        }
+        .frame(width: 420)
+        .sheet(isPresented: $showCrop) {
+            if let img = pickedImage {
+                ImageCropView(
+                    nsImage: img,
+                    onCrop: { data in
+                        localImageData = data
+                        showCrop = false
+                    },
+                    onCancel: {
+                        showCrop = false
+                    }
+                )
+            }
+        }
+        .onAppear {
+            if let station = existing {
+                name = station.name
+                streamURL = station.streamURL
+                localImageData = station.localImageData
+            }
+            focusedField = .name
+        }
+    }
+
+    private func pickImage() {
+        let panel = NSOpenPanel()
+        panel.allowedContentTypes = [.image]
+        panel.canChooseFiles = true
+        panel.canChooseDirectories = false
+        panel.allowsMultipleSelection = false
+        panel.message = "Choose an image for the station"
+        if panel.runModal() == .OK, let url = panel.url,
+           let image = NSImage(contentsOf: url) {
+            pickedImage = image
+            showCrop = true
+        }
+    }
+}
+
