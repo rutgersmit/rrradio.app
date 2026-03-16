@@ -33,7 +33,7 @@
         },
         {
           "name": "Qmusic NL",
-          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/QMUSIC.mp3",
+          "streamURL": "https://icecast-qmusicnl-cdp.triple-it.nl/Qmusic_nl_live_high.aac?aw_0_1st.skey=1773679294&aw_0_1st.playerid=site-player",
           "image": "qmusic.png"
         },
         {
@@ -53,7 +53,7 @@
         },
         {
           "name": "Joe",
-          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOE.mp3",
+          "streamURL": "https://icecast-qmusicnl-cdp.triple-it.nl/Joe_nl_high.aac?aw_0_1st.skey=1773679457&aw_0_1st.playerid=site-player",
           "image": "joe.png"
         }
       ]
@@ -85,7 +85,7 @@
             },
             {
               "name": "Greatest Hits Radio",
-              "streamURL": "https://media-ice.musicradio.com/GreatestHitsRadioMP3",
+              "streamURL": "https://stream-mz.hellorayo.co.uk/net2cambridge.aac?direct=true&aw_0_1st.skey=1602676850",
               "image": "greatesthitsradio.png"
             },
             {
@@ -192,7 +192,7 @@
         },
         {
           "name": "RTL2",
-          "streamURL": "https://streaming.radio.rtl2.fr/rtl2-1-44-96",
+          "streamURL": "https://hls.rtl2.fr/MTBjMWVmNDdiNWQ5YjExMmZhZjhkZGY0MmQxNjNiNjUuMTc3NDAyNzk2Nw~~/radio/webpHJPXnXrN7B6J7Q8mcqmxP/national/rtl2/long/index.m3u8",
           "image": "rtl2.png"
         }
       ]
