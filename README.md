@@ -1,6 +1,6 @@
 # rrradio
 
-A native macOS radio streaming app built with SwiftUI. No Electron, no web view — just a clean, fast app that plays internet radio and stays out of your way.
+A native macOS radio streaming app. No Electron, no web view, no banners, no fluff — just a clean, fast app that plays internet radio and stays out of your way. Free.
 
 Port of [rrradio.nl](https://rrradio.nl) for the desktop.
 
@@ -8,35 +8,25 @@ Port of [rrradio.nl](https://rrradio.nl) for the desktop.
 
 ## Features
 
-- **Stream any internet radio station** via AVFoundation — MP3, AAC, ICY streams
-- **Album art** fetched automatically from iTunes for the current song, with smooth fade transitions
-- **Now Playing integration** — Control Center, Touch Bar, and media keys all work
-- **Menu Bar Extra** — quick play/pause and station info without opening the window
-- **Responsive station grid** — scales with window width, cards expand to fill space
-- **Add, edit, delete stations** — custom name, stream URL, and artwork
-- **Auto-reconnect** — recovers silently after a stall or network blip
-- **Persists state** — remembers your stations and last-played station across launches
-- **Keeps playing when the window is closed**
-- Full **light and dark mode** support
-- Zero third-party dependencies
+- Stream any internet radio station — MP3, AAC, ICY streams
+- Album art fetched automatically for the current song
+- Media keys, Control Center, and Touch Bar all work
+- Menu Bar Extra — play/pause and station info without opening the window
+- Add, edit, and delete your own stations
+- Recovers automatically after a network blip
+- Keeps playing when the window is closed
+- Light and dark mode
 
 ## Default Stations
 
-| Station | Genre |
-| --- | --- |
-| NPO Radio 1 | News & talk |
-| NPO Radio 2 | Dutch pop & hits |
-| NPO 3FM | Alternative & new music |
-| Radio 538 | Dutch pop |
-| KINK | Rock & alternative |
-| Sky Radio | Pop |
-| Q-music | Pop |
-| BNR Nieuwsradio | Business news |
+On first launch, rrradio offers a curated list of stations to import. You can pick the countries and stations you want — nothing is added without your choice. Afterwards you can add, edit, or remove any station at any time.
 
-## Requirements
+## Finding Stream URLs
 
-- macOS 13 Ventura or later
-- Xcode 15+ (to build from source)
+To add a station, you need its direct stream URL. Good places to find one:
+
+- [radio-browser.info](https://www.radio-browser.info/) — community-maintained directory of stations worldwide
+- [streamurl.link](https://streamurl.link/) — find stream URLs for well-known stations
 
 ## Installation
 
@@ -49,7 +39,24 @@ Download the latest `.app` from [Releases](../../releases) and drag it to your A
 
 Or go to **System Settings → Privacy & Security** and click **Open Anyway**.
 
-## Build & Run
+---
+
+## Technical
+
+### Requirements
+
+- macOS 13 Ventura or later
+- Xcode 15+ (to build from source)
+
+### How It Works
+
+Built with SwiftUI and AVFoundation. Song metadata arrives as ICY timed metadata via `AVPlayerItemMetadataOutput`. When a new title comes in, the app queries the iTunes Search API to find album art, fetches it at 1200×1200, and shows it in both the player bar thumbnail and the full-screen artwork modal.
+
+The modal stays open across song changes — the artwork fades out, updates, and fades back in. If no artwork is available, the station's own image is shown as a placeholder.
+
+Now Playing info is handled via `MPNowPlayingInfoCenter` and `MPRemoteCommandCenter`, which powers Control Center, Touch Bar, and media key support.
+
+### Build & Run
 
 ```bash
 # Quick build and launch
@@ -67,7 +74,7 @@ xcodebuild \
 
 No signing required for local builds.
 
-## Project Structure
+### Project Structure
 
 ```text
 rrradio/
@@ -89,26 +96,17 @@ rrradio/
     └── ImageCropView.swift        # Square crop picker
 ```
 
-## Finding Stream URLs
+### Dependencies
 
-To add a station, you need its direct stream URL. Good places to find one:
+Zero third-party dependencies.
 
-- [radio-browser.info](https://www.radio-browser.info/) — community-maintained directory of stations worldwide
-- [streamurl.link](https://streamurl.link/) — find stream URLs for well-known stations
-
-## How It Works
-
-Song metadata arrives as ICY timed metadata via `AVPlayerItemMetadataOutput`. When a new title comes in, the app queries the iTunes Search API to find album art, fetches it at 1200×1200, and shows it in both the player bar thumbnail and the full-screen artwork modal.
-
-The modal stays open across song changes — the artwork fades out, updates, and fades back in. If no artwork is available during a transition, the station's own image is shown as a placeholder.
+---
 
 ## Credits
 
 - App icon generated with [Icon Kitchen](https://icon.kitchen/i/H4sIAAAAAAAAA0WPwQ6CMAyG36VePUgIRrhy8AH0ZjyUrRuLg-FgGkN4d7uBcYdu_dp8-TfDC22gEaoZlK6ddR4q2Kl0YA_Nnx0xl3RipvT1MxAjYc2Afkqo3t7sGYkvkKQw2Dg0wvUMiMftM-CDYIniTaI9SkN9XGz0-ddEzeSGlOuwJirLPCbKYncoKON87MFeW9bkWZGklxbXaMYL5sw6J4ONH7zxrvTOyBjJjVzf1HDtUHB3X76dWEtuCwEAAA)
 
----
-
-*Personal project. Not affiliated with any of the listed stations.*
+*Not affiliated with any of the listed stations.*
 
 ## License
 
