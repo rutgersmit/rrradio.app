@@ -1,0 +1,201 @@
+{
+  "version": 1,
+  "countries": [
+    {
+      "code": "nl",
+      "name": "Netherlands",
+      "directory": "netherlands",
+      "stations": [
+        {
+          "name": "NPO Radio 1",
+          "streamURL": "https://icecast.omroep.nl/radio1-bb-mp3",
+          "image": "nporadio1.png"
+        },
+        {
+          "name": "NPO Radio 2",
+          "streamURL": "https://icecast.omroep.nl/radio2-bb-mp3",
+          "image": "nporadio2.png"
+        },
+        {
+          "name": "NPO 3FM",
+          "streamURL": "https://icecast.omroep.nl/3fm-bb-mp3",
+          "image": "3fm.png"
+        },
+        {
+          "name": "KINK",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/KINK.mp3",
+          "image": "kink.png"
+        },
+        {
+          "name": "Veronica",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/VERONICA.mp3",
+          "image": "veronica.png"
+        },
+        {
+          "name": "Qmusic NL",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/QMUSIC.mp3",
+          "image": "qmusic.png"
+        },
+        {
+          "name": "Sky Radio",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/SKYRADIO.mp3",
+          "image": "skyradio.png"
+        },
+        {
+          "name": "Radio 538",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO538.mp3",
+          "image": "radio538.png"
+        },
+        {
+          "name": "Radio 10",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/RADIO10.mp3",
+          "image": "radio10.png"
+        },
+        {
+          "name": "Joe",
+          "streamURL": "https://playerservices.streamtheworld.com/api/livestream-redirect/JOE.mp3",
+          "image": "joe.png"
+        }
+      ]
+    },
+    {
+      "code": "gb",
+      "name": "England",
+      "directory": "england",
+      "stations": [
+            {
+              "name": "BBC Radio 2",
+              "streamURL": "https://lsn.lv/bbcradio.m3u8?station=bbc_radio_two&bitrate=320000",
+              "image": "bbcradio2.png"
+            },
+            {
+              "name": "BBC Radio 4",
+              "streamURL": "https://a.files.bbci.co.uk/ms6/live/3441A116-B12E-4D2F-ACA8-C1984642FA4B/audio/simulcast/hls/nonuk/audio_syndication_low_sbr_v1/aks/bbc_radio_fourfm.m3u8",
+              "image": "bbcradio4.png"
+            },
+            {
+              "name": "Capital FM",
+              "streamURL": "https://media-ice.musicradio.com/CapitalMP3",
+              "image": "capitalfm.png"
+            },
+            {
+              "name": "Heart FM",
+              "streamURL": "https://media-ssl.musicradio.com/HeartUK",
+              "image": "heartradio.png"
+            },
+            {
+              "name": "Greatest Hits Radio",
+              "streamURL": "https://media-ice.musicradio.com/GreatestHitsRadioMP3",
+              "image": "greatesthitsradio.png"
+            },
+            {
+              "name": "Smooth Radio",
+              "streamURL": "https://media-ssl.musicradio.com/SmoothLondon",
+              "image": "smooth.png"
+            }
+      ]
+    },
+    {
+      "code": "de",
+      "name": "Germany",
+      "directory": "germany",
+      "stations": [
+        {
+          "name": "80s80s Radio",
+          "streamURL": "https://regiocast.streamabc.net/regc-80s80smweb2517500-mp3-192-1672667",
+          "image": "80s80s.png"
+        },
+        {
+          "name": "90s90s Radio",
+          "streamURL": "https://regiocast.streamabc.net/regc-90s90spop4760822-mp3-192-9403761",
+          "image": "90s90s.png"
+        },
+        {
+          "name": "Antenne Bayern",
+          "streamURL": "https://stream.antenne.de/antenne/stream/mp3",
+          "image": "antennebayern.png"
+        },
+        {
+          "name": "Bayern Radio 1",
+          "streamURL": "https://mcdn.hf.br.de/br/hf/b1obb/master-192000.m3u8",
+          "image": "bayernradio1.png"
+        },
+        {
+          "name": "NDR 2",
+          "streamURL": "https://icecast.ndr.de/ndr/ndr2/niedersachsen/mp3/128/stream.mp3?aggregator=web",
+          "image": "ndr2.png"
+        },
+        {
+          "name": "WDR 2",
+          "streamURL": "https://wdrhf.akamaized.net/hls/live/2027966/wdr2rheinland/192/seglist.m3u8",
+          "image": "wdr2.png"
+        },
+        {
+          "name": "Radio Schlagerparadies",
+          "streamURL": "https://webstream.schlagerparadies.de/schlagerparadies128k.mp3",
+          "image": "schlagerparadies.png"
+        }
+
+      ]
+    },
+    {
+      "code": "be",
+      "name": "Belgium",
+      "directory": "belgium",
+      "stations": [
+        {
+          "name": "Radio 1",
+          "streamURL": "https://icecast.vrtcdn.be/radio1-high.mp3",
+          "image": "radio1.png"
+        },
+        {
+          "name": "Radio 2",
+          "streamURL": "https://radio.vrtcdn.be/vrt/radio2-vlaams-brabant/live.m3u8?ola=true&contentType=LIVESTREAM&filter=%28%21%28type%3D%3D%22audio%22%26%26FourCC%21%3D%22AACL%22%29%29",
+          "image": "radio2.png"
+        },
+        {
+          "name": "Studio Brussel",
+          "streamURL": "https://radio.vrtcdn.be/vrt/stubru/live.m3u8?ola=true&contentType=LIVESTREAM&filter=%28%21%28type%3D%3D%22audio%22%26%26FourCC%21%3D%22AACL%22%29%29",
+          "image": "stubru.png"
+        },
+        {
+          "name": "MNM",
+          "streamURL": "https://icecast.vrtcdn.be/mnm-high.mp3",
+          "image": "mnm.png"
+        },
+        {
+          "name": "Qmusic BE",
+          "streamURL": "https://streams.radio.dpgmedia.cloud/redirect/qmusic_be/aac?gdpr=1&gdpr_consent=&player=rp_external&source=rrradio",
+          "image": "qmusic.png"
+        }
+      ]
+    },
+    {
+      "code": "fr",
+      "name": "France",
+      "directory": "france",
+      "stations": [
+        {
+          "name": "France info",
+          "streamURL": "https://stream.radiofrance.fr/franceinfo/franceinfo_hifi.m3u8?id=radiofrance&timeshift=-4",
+          "image": "franceinfo.png"
+        },
+        {
+          "name": "France Inter",
+          "streamURL": "https://stream.radiofrance.fr/franceinter/franceinter_hifi.m3u8?id=radiofrance&timeshift=-4",
+          "image": "franceinter.png"
+        },
+        {
+          "name": "NRJ",
+          "streamURL": "https://streaming.nrjaudio.fm/oufdfatx4thg?origine=playernrj&aw_0_req.userConsentV2=&aw_0_1st.station=",
+          "image": "nrj.png"
+        },
+        {
+          "name": "RTL2",
+          "streamURL": "https://streaming.radio.rtl2.fr/rtl2-1-44-96",
+          "image": "rtl2.png"
+        }
+      ]
+    }
+  ]
+}
