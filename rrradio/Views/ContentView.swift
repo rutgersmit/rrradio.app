@@ -4,17 +4,29 @@ struct ContentView: View {
     @StateObject private var store = StationStore()
     @StateObject private var player = AudioPlayerManager.shared
     @State private var showArtworkModal = false
+    @State private var modalArtworkData: Data? = nil
 
     var body: some View {
         VStack(spacing: 0) {
             StationListView(store: store, player: player)
             PlayerControlsView(player: player)
         }
+        .background {
+            if let bg = NSImage(named: "bg") {
+                Image(nsImage: bg)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .clipped()
+                    .overlay(Color.white.opacity(0.85))
+            }
+        }
         .frame(minWidth: 500, minHeight: 400)
+        .animation(.easeInOut(duration: 0.4), value: player.currentArtworkData)
         .overlay(alignment: .bottomLeading) {
             if let artworkData = player.currentArtworkData,
                let nsImage = NSImage(data: artworkData) {
-                Button(action: { showArtworkModal = true }) {
+                Button(action: { modalArtworkData = artworkData; showArtworkModal = true }) {
                     Image(nsImage: nsImage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)
@@ -26,18 +38,19 @@ struct ContentView: View {
                 .focusable(false)
                 .padding(.leading, 16)
                 .padding(.bottom, 10)
+                .id(artworkData)
+                .transition(.opacity)
             }
         }
         .overlay {
             GeometryReader { geo in
-                if showArtworkModal,
-                   let artworkData = player.currentArtworkData,
-                   let nsImage = NSImage(data: artworkData) {
+                if showArtworkModal {
                     Color.black.opacity(0.45)
                         .onTapGesture { showArtworkModal = false }
                         .overlay {
                             ArtworkModalView(
-                                nsImage: nsImage,
+                                artworkData: modalArtworkData,
+                                station: player.currentStation,
                                 songTitle: player.currentSongTitle,
                                 artist: player.currentArtist,
                                 track: player.currentTrack,
@@ -51,6 +64,12 @@ struct ContentView: View {
                         }
                 }
             }
+        }
+        .onChange(of: player.currentArtworkData) { newData in
+            modalArtworkData = newData
+        }
+        .sheet(isPresented: $store.needsDefaultsPrompt) {
+            DefaultImportView(store: store)
         }
         .onAppear {
             setupRemoteCommands()

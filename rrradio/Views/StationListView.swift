@@ -67,7 +67,7 @@ struct StationListView: View {
                 .padding(spacing)
             }
         }
-        .background(Color.rrBackground)
+        .background(.clear)
         .background(stationShortcuts)
         .toolbar {
             ToolbarItem(placement: .automatic) {

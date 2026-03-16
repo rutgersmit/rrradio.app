@@ -97,18 +97,34 @@ struct PlayerControlsView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
         }
-        .background(Color.rrPlayer)
+        .background(.ultraThinMaterial)
     }
 }
 
 struct ArtworkModalView: View {
-    let nsImage: NSImage
+    let artworkData: Data?
+    let station: RadioStation?
     let songTitle: String?
     let artist: String?
     let track: String?
     let stationName: String?
     let availableSize: CGSize
     let onDismiss: () -> Void
+
+    @State private var displayedImage: NSImage?
+    @State private var imageOpacity: Double = 1.0
+
+    init(artworkData: Data?, station: RadioStation?, songTitle: String?, artist: String?, track: String?, stationName: String?, availableSize: CGSize, onDismiss: @escaping () -> Void) {
+        self.artworkData = artworkData
+        self.station = station
+        self.songTitle = songTitle
+        self.artist = artist
+        self.track = track
+        self.stationName = stationName
+        self.availableSize = availableSize
+        self.onDismiss = onDismiss
+        self._displayedImage = State(initialValue: artworkData.flatMap { NSImage(data: $0) })
+    }
 
     private var artworkDimension: CGFloat {
         let fromWidth = availableSize.width * 0.75
@@ -118,43 +134,74 @@ struct ArtworkModalView: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            Image(nsImage: nsImage)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(width: artworkDimension, height: artworkDimension)
-                .clipShape(RoundedRectangle(cornerRadius: 12))
-                .padding(.top, 32)
-                .padding(.horizontal, 32)
-                .onTapGesture { onDismiss() }
+            ZStack {
+                if let img = displayedImage {
+                    Image(nsImage: img)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                } else if let station = station {
+                    StationImageView(station: station)
+                        .aspectRatio(contentMode: .fit)
+                } else {
+                    RoundedRectangle(cornerRadius: 12)
+                        .fill(Color.rrCard)
+                        .overlay(
+                            Image(systemName: "radio")
+                                .font(.system(size: 48))
+                                .foregroundColor(.rrSecondaryText)
+                        )
+                }
+            }
+            .frame(width: artworkDimension, height: artworkDimension)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            .opacity(imageOpacity)
+            .padding(.top, 32)
+            .padding(.horizontal, 32)
+            .onTapGesture { onDismiss() }
+            .onChange(of: artworkData) { newData in
+                withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                    withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
+                }
+            }
 
             VStack(spacing: 4) {
-                if let track = track {
-                    Text(track)
-                        .font(.system(size: 16, weight: .semibold))
-                        .foregroundColor(.rrPrimaryText)
-                        .lineLimit(2)
-                        .multilineTextAlignment(.center)
-                }
-                if let artist = artist {
-                    Text(artist)
-                        .font(.system(size: 13))
-                        .foregroundColor(.rrSecondaryText)
-                        .lineLimit(1)
-                } else if let song = songTitle, track == nil {
-                    Text(song)
-                        .font(.system(size: 13))
-                        .foregroundColor(.rrSecondaryText)
-                        .lineLimit(1)
-                }
-                if let station = stationName {
-                    Text(station)
-                        .font(.system(size: 11))
-                        .foregroundColor(.rrSecondaryText.opacity(0.6))
-                        .padding(.top, 2)
-                }
+                Text(track ?? "\u{00A0}")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.rrPrimaryText)
+                    .lineLimit(2)
+                    .multilineTextAlignment(.center)
+
+                Text(artist ?? songTitle ?? "\u{00A0}")
+                    .font(.system(size: 13))
+                    .foregroundColor(.rrSecondaryText)
+                    .lineLimit(1)
+
+                Text(stationName ?? "\u{00A0}")
+                    .font(.system(size: 11))
+                    .foregroundColor(.rrSecondaryText.opacity(0.6))
+                    .padding(.top, 2)
             }
             .padding(.top, 20)
             .padding(.horizontal, 32)
+
+            if let spotifyDestination = spotifyURL ?? defaultSpotifyURL,
+               let youtubeDestination = youtubeURL ?? defaultYouTubeURL {
+                HStack(spacing: 16) {
+                    Link(destination: spotifyDestination) {
+                        Label("Spotify", systemImage: "music.note")
+                            .font(.system(size: 13))
+                    }
+                    Link(destination: youtubeDestination) {
+                        Label("YouTube", systemImage: "play.rectangle")
+                            .font(.system(size: 13))
+                    }
+                }
+                .opacity(spotifyURL != nil || youtubeURL != nil ? 1 : 0)
+                .allowsHitTesting(spotifyURL != nil || youtubeURL != nil)
+                .padding(.top, 12)
+            }
 
             Button("") { onDismiss() }
                 .keyboardShortcut(.escape, modifiers: [])
@@ -163,5 +210,32 @@ struct ArtworkModalView: View {
         }
         .frame(width: artworkDimension + 64)
         .background(Color.rrBackground)
+    }
+
+    private var searchQuery: String? {
+        let query = [artist, track].compactMap { $0 }.joined(separator: " ")
+        return query.isEmpty ? nil : query
+    }
+
+    private var spotifyURL: URL? {
+        guard let q = searchQuery,
+              let encoded = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        else { return nil }
+        return URL(string: "https://open.spotify.com/search/\(encoded)")
+    }
+
+    private var youtubeURL: URL? {
+        guard let q = searchQuery,
+              let encoded = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+        else { return nil }
+        return URL(string: "https://www.youtube.com/results?search_query=\(encoded)")
+    }
+
+    private var defaultSpotifyURL: URL? {
+        URL(string: "https://open.spotify.com")
+    }
+
+    private var defaultYouTubeURL: URL? {
+        URL(string: "https://www.youtube.com")
     }
 }

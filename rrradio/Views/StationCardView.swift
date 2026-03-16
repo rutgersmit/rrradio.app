@@ -20,7 +20,7 @@ struct StationCardView: View {
 
             // Gradient overlay
             LinearGradient(
-                colors: [.clear, Color.black.opacity(0.75)],
+                colors: [.clear, Color.black.opacity(0.25)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -28,7 +28,7 @@ struct StationCardView: View {
             // Station name
             VStack(alignment: .leading, spacing: 2) {
                 Text(station.name)
-                    .font(.system(size: 13, weight: .semibold))
+                    .font(.system(size: 11, weight: .semibold))
                     .foregroundColor(.white)
                     .lineLimit(2)
 
@@ -38,7 +38,11 @@ struct StationCardView: View {
                         .foregroundColor(.yellow)
                 }
             }
-            .padding(10)
+            .padding(.horizontal, 5)
+            .padding(.vertical, 3)
+            .background(Color(white: 0, opacity: 0.15))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .padding(6)
 
             // Play indicator overlay
             if isLoading {

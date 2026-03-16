@@ -18,6 +18,13 @@ struct AddEditStationView: View {
     @FocusState private var focusedField: Field?
 
     var isEditing: Bool { existing != nil }
+    private var trimmedName: String { name.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private var normalizedStreamURL: String? {
+        URLSecurityPolicy.safeStreamURL(from: streamURL)?.absoluteString
+    }
+    private var canSave: Bool {
+        !trimmedName.isEmpty && normalizedStreamURL != nil
+    }
 
     var body: some View {
         VStack(spacing: 0) {
@@ -105,20 +112,21 @@ struct AddEditStationView: View {
                     .keyboardShortcut(.cancelAction)
 
                 Button(isEditing ? "Save" : "Add") {
+                    guard let safeStreamURL = normalizedStreamURL else { return }
+
                     let station = RadioStation(
                         id: existing?.id ?? UUID(),
-                        name: name.trimmingCharacters(in: .whitespaces),
-                        streamURL: streamURL.trimmingCharacters(in: .whitespaces),
+                        name: trimmedName,
+                        streamURL: safeStreamURL,
                         imageURL: existing?.imageURL ?? "",
-                        localImageData: localImageData,
+                        localImageData: URLSecurityPolicy.boundedLocalImageData(localImageData),
                         isDefault: existing?.isDefault ?? false
                     )
                     onSave(station)
                     dismiss()
                 }
                 .keyboardShortcut(.defaultAction)
-                .disabled(name.trimmingCharacters(in: .whitespaces).isEmpty ||
-                          streamURL.trimmingCharacters(in: .whitespaces).isEmpty)
+                .disabled(!canSave)
             }
             .padding()
         }
@@ -154,8 +162,14 @@ struct AddEditStationView: View {
         panel.canChooseDirectories = false
         panel.allowsMultipleSelection = false
         panel.message = "Choose an image for the station"
-        if panel.runModal() == .OK, let url = panel.url,
-           let image = NSImage(contentsOf: url) {
+        if panel.runModal() == .OK,
+           let url = panel.url,
+           let values = try? url.resourceValues(forKeys: [.fileSizeKey]),
+           let fileSize = values.fileSize,
+           fileSize <= URLSecurityPolicy.maxLocalImageBytes,
+           let data = try? Data(contentsOf: url),
+           data.count <= URLSecurityPolicy.maxLocalImageBytes,
+           let image = NSImage(data: data) {
             pickedImage = image
             showCrop = true
         }

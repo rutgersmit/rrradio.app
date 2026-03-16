@@ -20,6 +20,10 @@
 		F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* StationImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */; };
 		C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */; };
+		AA11BB22CC33DD44EE55FF66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */; };
+		AABB0011223344556677889D /* DefaultImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0011223344556677889C /* DefaultImportView.swift */; };
+		BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */; };
+		BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */; };
 /* End PBXBuildFile section */
 /* Begin PBXFileReference section */
 		54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "rrradioApp.swift"; path = "rrradioApp.swift"; sourceTree = "<group>"; };
@@ -36,6 +40,10 @@
 		B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StationImageView.swift"; path = "StationImageView.swift"; sourceTree = "<group>"; };
 		D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageCropView.swift"; path = "ImageCropView.swift"; sourceTree = "<group>"; };
 		FEB47FFD4B72FCD069C3F960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Info.plist; sourceTree = "<group>"; };
+		AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
+		AABB0011223344556677889C /* DefaultImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DefaultImportView.swift"; path = "DefaultImportView.swift"; sourceTree = "<group>"; };
+		BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RemoteConfig.swift"; path = "RemoteConfig.swift"; sourceTree = "<group>"; };
+		BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CatalogFetcher.swift"; path = "CatalogFetcher.swift"; sourceTree = "<group>"; };
 		952F0E610EC52A3AAA09C37F /* rrradio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rrradio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 /* Begin PBXFrameworksBuildPhase section */
@@ -62,6 +70,7 @@
 				EF589F6F7E67CF6DA5C4FCF6,
 				6D061CC1CACB4348B4302A4D,
 				1843C4017B86A53E68AFD07D,
+				BB11CC22DD33EE44FF550013,
 			);
 			path = "Managers";
 			sourceTree = "<group>";
@@ -76,6 +85,7 @@
 				7F1FC408126E0511A26CB522,
 				B2C3D4E5F6A7B8C9D0E1F3A4,
 				D4E5F6A7B8C9D0E1F2A3B4C5,
+				AABB0011223344556677889C,
 			);
 			path = "Views";
 			sourceTree = "<group>";
@@ -85,7 +95,9 @@
 			children = (
 				54FD74C7D20B9C4F6C3F75CD,
 				F518AA2DB68FD64AB79B50D2,
-				CA608C0B22E7B6F9B389BDDD,
+				BB11CC22DD33EE44FF550011,
+				AA11BB22CC33DD44EE55FF67,
+					CA608C0B22E7B6F9B389BDDD,
 				1EB0645B1049955C676EEE0B,
 				78EF4B0EA3FDA2A792BCF074,
 				FEB47FFD4B72FCD069C3F960,
@@ -164,6 +176,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AA11BB22CC33DD44EE55FF66 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -186,6 +199,9 @@
 				F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */,
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* StationImageView.swift in Sources */,
 				C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */,
+				AABB0011223344556677889D /* DefaultImportView.swift in Sources */,
+				BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */,
+				BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -204,7 +220,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
-				MACOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -230,7 +246,7 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
-				MACOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_FAST_MATH = YES;
 				SDKROOT = macosx;
 				ENABLE_NS_ASSERTIONS = NO;
@@ -249,7 +265,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				INFOPLIST_FILE = rrradio/Info.plist;
-				MACOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.rrradio.app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;
@@ -270,7 +286,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				INFOPLIST_FILE = rrradio/Info.plist;
-				MACOS_DEPLOYMENT_TARGET = 13.0;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				PRODUCT_BUNDLE_IDENTIFIER = "nl.rrradio.app";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = macosx;

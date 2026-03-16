@@ -22,11 +22,6 @@
 	<string>13.0</string>
 	<key>LSUIElement</key>
 	<false/>
-	<key>NSAppTransportSecurity</key>
-	<dict>
-		<key>NSAllowsArbitraryLoads</key>
-		<true/>
-	</dict>
 	<key>NSPrincipalClass</key>
 	<string>NSApplication</string>
 	<key>NSSupportsAutomaticGraphicsSwitching</key>
@@ -34,6 +29,6 @@
 	<key>NSUserNotificationUsageDescription</key>
 	<string>rrradio shows notifications when switching stations.</string>
 	<key>NSHumanReadableCopyright</key>
-	<string>Personal use only</string>
+	<string>Copyright (c) 2026 rrradio contributors</string>
 </dict>
 </plist>

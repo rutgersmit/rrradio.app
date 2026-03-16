@@ -1,0 +1,23 @@
+# macOS
+.DS_Store
+
+# Local tooling
+.claude/
+
+# Xcode
+build/
+*.xcuserstate
+xcuserdata/
+*.xccheckout
+*.moved-aside
+DerivedData/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/
+fastlane/test_output/

@@ -30,12 +30,13 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
     private var reconnectTask: Task<Void, Never>?
     private var metadataOutput: AVPlayerItemMetadataOutput?
     private var artworkFetchTask: Task<Void, Never>?
+    private var appNapActivity: NSObjectProtocol?
+    private var lastArtworkFetchAt: Date?
 
     private let lastStationKey = "lastPlayingStationID"
 
     private override init() {
         super.init()
-        preventAppNap()
     }
 
     // MARK: - Playback
@@ -46,11 +47,13 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         currentStation = station
         isLoading = true
 
-        guard let url = URL(string: station.streamURL) else {
+        guard let url = URLSecurityPolicy.safeStreamURL(from: station.streamURL) else {
             isLoading = false
             errorStation = station.id
             return
         }
+
+        beginAppNapProtectionIfNeeded()
 
         let item = AVPlayerItem(url: url)
         playerItem = item
@@ -110,6 +113,7 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         currentArtist = nil
         currentTrack = nil
         currentArtworkData = nil
+        endAppNapProtectionIfNeeded()
         if let s = currentStation { NowPlayingManager.shared.update(station: s, isPlaying: false) }
     }
 
@@ -146,8 +150,18 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
     nonisolated func metadataOutput(_ output: AVPlayerItemMetadataOutput,
                                     didOutputTimedMetadataGroups groups: [AVTimedMetadataGroup],
                                     from track: AVPlayerItemTrack?) {
-        let title = groups.flatMap(\.items).compactMap(\.stringValue).first(where: { !$0.isEmpty })
+        let items = groups.flatMap(\.items)
         Task { @MainActor in
+            var title: String? = nil
+            for item in items {
+                if let value = try? await item.load(.stringValue), !value.isEmpty {
+                    let sanitized = URLSecurityPolicy.sanitizeMetadata(value)
+                    if !sanitized.isEmpty {
+                        title = sanitized
+                        break
+                    }
+                }
+            }
             self.currentSongTitle = title
             // Parse "Artist - Title"
             if let t = title {
@@ -175,14 +189,31 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
     }
 
     private func fetchArtwork(for title: String) {
+        let now = Date()
+        if let lastArtworkFetchAt,
+           now.timeIntervalSince(lastArtworkFetchAt) < 2 {
+            return
+        }
+        lastArtworkFetchAt = now
+
         artworkFetchTask?.cancel()
         artworkFetchTask = Task {
-            guard let query = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
-                  let url = URL(string: "https://itunes.apple.com/search?term=\(query)&entity=song&limit=5")
-            else { return }
+            var components = URLComponents(string: "https://itunes.apple.com/search")
+            components?.queryItems = [
+                URLQueryItem(name: "term", value: title),
+                URLQueryItem(name: "entity", value: "song"),
+                URLQueryItem(name: "limit", value: "5")
+            ]
 
-            guard let (data, _) = try? await URLSession.shared.data(from: url),
-                  !Task.isCancelled else { return }
+            guard let url = components?.url,
+                  let data = await URLSecurityPolicy.fetchData(
+                    from: url,
+                    timeoutInterval: 8,
+                    maxBytes: URLSecurityPolicy.maxCatalogBytes,
+                    acceptedMimePrefixes: nil
+                  ),
+                  !Task.isCancelled
+            else { return }
 
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let results = json["results"] as? [[String: Any]],
@@ -197,8 +228,13 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
             }
 
             let highResUrl = artworkUrl.replacingOccurrences(of: "100x100", with: "1200x1200")
-            guard let imageUrl = URL(string: highResUrl),
-                  let (imageData, _) = try? await URLSession.shared.data(from: imageUrl),
+            guard let imageUrl = URLSecurityPolicy.safeImageURL(from: highResUrl),
+                let imageData = await URLSecurityPolicy.fetchData(
+                  from: imageUrl,
+                  timeoutInterval: 8,
+                  maxBytes: URLSecurityPolicy.maxImageBytes,
+                  acceptedMimePrefixes: ["image/"]
+                ),
                   !Task.isCancelled
             else { return }
 
@@ -211,12 +247,22 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
 
     // MARK: - App Nap prevention
 
-    private func preventAppNap() {
+    private func beginAppNapProtectionIfNeeded() {
         #if os(macOS)
-        ProcessInfo.processInfo.beginActivity(
+        guard appNapActivity == nil else { return }
+        appNapActivity = ProcessInfo.processInfo.beginActivity(
             options: [.userInitiated, .idleSystemSleepDisabled],
             reason: "Radio streaming"
         )
+        #endif
+    }
+
+    private func endAppNapProtectionIfNeeded() {
+        #if os(macOS)
+        if let appNapActivity {
+            ProcessInfo.processInfo.endActivity(appNapActivity)
+            self.appNapActivity = nil
+        }
         #endif
     }
 }

@@ -40,13 +40,19 @@ class NowPlayingManager {
 
         // Use local image data if available, otherwise download from URL
         #if os(macOS)
-        if let data = station.localImageData, let image = NSImage(data: data) {
+        if let data = URLSecurityPolicy.boundedLocalImageData(station.localImageData),
+           let image = NSImage(data: data) {
             let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
             info[MPMediaItemPropertyArtwork] = artwork
             MPNowPlayingInfoCenter.default().nowPlayingInfo = info
-        } else if let url = URL(string: station.imageURL) {
+        } else if let url = URLSecurityPolicy.safeImageURL(from: station.imageURL) {
             Task {
-                if let (data, _) = try? await URLSession.shared.data(from: url),
+                if let data = await URLSecurityPolicy.fetchData(
+                    from: url,
+                    timeoutInterval: 8,
+                    maxBytes: URLSecurityPolicy.maxImageBytes,
+                    acceptedMimePrefixes: ["image/"]
+                ),
                    let image = NSImage(data: data) {
                     let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
                     info[MPMediaItemPropertyArtwork] = artwork
@@ -62,7 +68,8 @@ class NowPlayingManager {
         info[MPMediaItemPropertyTitle] = title
         info[MPMediaItemPropertyArtist] = station.name
         #if os(macOS)
-        if let data = artworkData, let image = NSImage(data: data) {
+        if let data = URLSecurityPolicy.boundedLocalImageData(artworkData),
+           let image = NSImage(data: data) {
             let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
             info[MPMediaItemPropertyArtwork] = artwork
         }

@@ -4,12 +4,13 @@ struct StationImageView: View {
     let station: RadioStation
 
     var body: some View {
-        if let data = station.localImageData, let nsImage = NSImage(data: data) {
+        if let data = URLSecurityPolicy.boundedLocalImageData(station.localImageData),
+           let nsImage = NSImage(data: data) {
             Image(nsImage: nsImage)
                 .resizable()
                 .aspectRatio(contentMode: .fill)
-        } else {
-            AsyncImage(url: URL(string: station.imageURL)) { phase in
+        } else if let url = URLSecurityPolicy.safeImageURL(from: station.imageURL) {
+            AsyncImage(url: url) { phase in
                 switch phase {
                 case .success(let image):
                     image.resizable().aspectRatio(contentMode: .fill)
@@ -17,6 +18,8 @@ struct StationImageView: View {
                     placeholder
                 }
             }
+        } else {
+            placeholder
         }
     }
 
