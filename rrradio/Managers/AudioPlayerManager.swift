@@ -217,9 +217,17 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
 
             guard let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let results = json["results"] as? [[String: Any]],
-                  let first = results.first,
-                  let artworkUrl = first["artworkUrl100"] as? String
+                  !results.isEmpty
             else {
+                self.currentArtworkData = nil
+                if let s = self.currentStation, let t = self.currentSongTitle {
+                    NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: nil)
+                }
+                return
+            }
+
+            let preferred = results.first { ($0["collectionType"] as? String) == "Single" } ?? results[0]
+            guard let artworkUrl = preferred["artworkUrl100"] as? String else {
                 self.currentArtworkData = nil
                 if let s = self.currentStation, let t = self.currentSongTitle {
                     NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: nil)

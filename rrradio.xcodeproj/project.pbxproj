@@ -7,45 +7,47 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		265BA5D12A3F41A07C9729D8 /* rrradioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */; };
-		1DD3444F044D066FF0907FE4 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F518AA2DB68FD64AB79B50D2 /* AppColors.swift */; };
+		05B3E845022386CD7BA30C8E /* StationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB262413094BEEEED5A63FB /* StationCardView.swift */; };
 		06ECA306B51AB90E9D0F7663 /* RadioStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */; };
+		1DD3444F044D066FF0907FE4 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F518AA2DB68FD64AB79B50D2 /* AppColors.swift */; };
+		265BA5D12A3F41A07C9729D8 /* rrradioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */; };
 		57D309B5B1542247B84D652C /* StationStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF589F6F7E67CF6DA5C4FCF6 /* StationStore.swift */; };
 		77011F3AFC22F57AF645B55D /* AudioPlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6D061CC1CACB4348B4302A4D /* AudioPlayerManager.swift */; };
-		B13B885280DDDE5FF3D5024B /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */; };
-		F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8C13525269D9F9FAC9D986 /* ContentView.swift */; };
-		CC2CCA6E7ED999144EA94255 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930EFA48E3A26FC71286029C /* StationListView.swift */; };
-		05B3E845022386CD7BA30C8E /* StationCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1FB262413094BEEEED5A63FB /* StationCardView.swift */; };
-		AF361939E582EEBDABE838F5 /* AddEditStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED9E18FC3AF1C92CEA7187 /* AddEditStationView.swift */; };
-		F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* StationImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */; };
-		C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */; };
 		AA11BB22CC33DD44EE55FF66 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */; };
 		AABB0011223344556677889D /* DefaultImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AABB0011223344556677889C /* DefaultImportView.swift */; };
+		AF361939E582EEBDABE838F5 /* AddEditStationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8ED9E18FC3AF1C92CEA7187 /* AddEditStationView.swift */; };
+		B13B885280DDDE5FF3D5024B /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */; };
 		BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */; };
 		BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */; };
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */; };
+		CC2CCA6E7ED999144EA94255 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930EFA48E3A26FC71286029C /* StationListView.swift */; };
+		F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8C13525269D9F9FAC9D986 /* ContentView.swift */; };
+		F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */; };
 /* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "rrradioApp.swift"; path = "rrradioApp.swift"; sourceTree = "<group>"; };
-		F518AA2DB68FD64AB79B50D2 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AppColors.swift"; path = "AppColors.swift"; sourceTree = "<group>"; };
-		BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RadioStation.swift"; path = "RadioStation.swift"; sourceTree = "<group>"; };
-		EF589F6F7E67CF6DA5C4FCF6 /* StationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StationStore.swift"; path = "StationStore.swift"; sourceTree = "<group>"; };
-		6D061CC1CACB4348B4302A4D /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AudioPlayerManager.swift"; path = "AudioPlayerManager.swift"; sourceTree = "<group>"; };
-		1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "NowPlayingManager.swift"; path = "NowPlayingManager.swift"; sourceTree = "<group>"; };
-		0A8C13525269D9F9FAC9D986 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ContentView.swift"; path = "ContentView.swift"; sourceTree = "<group>"; };
-		930EFA48E3A26FC71286029C /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StationListView.swift"; path = "StationListView.swift"; sourceTree = "<group>"; };
-		1FB262413094BEEEED5A63FB /* StationCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StationCardView.swift"; path = "StationCardView.swift"; sourceTree = "<group>"; };
-		E8ED9E18FC3AF1C92CEA7187 /* AddEditStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "AddEditStationView.swift"; path = "AddEditStationView.swift"; sourceTree = "<group>"; };
-		7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "PlayerControlsView.swift"; path = "PlayerControlsView.swift"; sourceTree = "<group>"; };
-		B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "StationImageView.swift"; path = "StationImageView.swift"; sourceTree = "<group>"; };
-		D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ImageCropView.swift"; path = "ImageCropView.swift"; sourceTree = "<group>"; };
-		FEB47FFD4B72FCD069C3F960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Info.plist; sourceTree = "<group>"; };
-		AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = "Assets.xcassets"; path = "Assets.xcassets"; sourceTree = "<group>"; };
-		AABB0011223344556677889C /* DefaultImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "DefaultImportView.swift"; path = "DefaultImportView.swift"; sourceTree = "<group>"; };
-		BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "RemoteConfig.swift"; path = "RemoteConfig.swift"; sourceTree = "<group>"; };
-		BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "CatalogFetcher.swift"; path = "CatalogFetcher.swift"; sourceTree = "<group>"; };
+		0A8C13525269D9F9FAC9D986 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingManager.swift; sourceTree = "<group>"; };
+		1FB262413094BEEEED5A63FB /* StationCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationCardView.swift; sourceTree = "<group>"; };
+		54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = rrradioApp.swift; sourceTree = "<group>"; };
+		6D061CC1CACB4348B4302A4D /* AudioPlayerManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AudioPlayerManager.swift; sourceTree = "<group>"; };
+		7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerControlsView.swift; sourceTree = "<group>"; };
+		930EFA48E3A26FC71286029C /* StationListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationListView.swift; sourceTree = "<group>"; };
 		952F0E610EC52A3AAA09C37F /* rrradio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = rrradio.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		AABB0011223344556677889C /* DefaultImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultImportView.swift; sourceTree = "<group>"; };
+		B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationImageView.swift; sourceTree = "<group>"; };
+		BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfig.swift; sourceTree = "<group>"; };
+		BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFetcher.swift; sourceTree = "<group>"; };
+		BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioStation.swift; sourceTree = "<group>"; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropView.swift; sourceTree = "<group>"; };
+		E8ED9E18FC3AF1C92CEA7187 /* AddEditStationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddEditStationView.swift; sourceTree = "<group>"; };
+		EF589F6F7E67CF6DA5C4FCF6 /* StationStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StationStore.swift; sourceTree = "<group>"; };
+		F518AA2DB68FD64AB79B50D2 /* AppColors.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppColors.swift; sourceTree = "<group>"; };
+		FEB47FFD4B72FCD069C3F960 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
+
 /* Begin PBXFrameworksBuildPhase section */
 		C4568555A963B9ABEFCBB534 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
@@ -55,62 +57,17 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
+
 /* Begin PBXGroup section */
-		CA608C0B22E7B6F9B389BDDD /* Models */ = {
-			isa = PBXGroup;
-			children = (
-				BD9EE54E36C7ACB9F2FCE651,
-			);
-			path = "Models";
-			sourceTree = "<group>";
-		};
 		1EB0645B1049955C676EEE0B /* Managers */ = {
 			isa = PBXGroup;
 			children = (
-				EF589F6F7E67CF6DA5C4FCF6,
-				6D061CC1CACB4348B4302A4D,
-				1843C4017B86A53E68AFD07D,
-				BB11CC22DD33EE44FF550013,
+				EF589F6F7E67CF6DA5C4FCF6 /* StationStore.swift */,
+				6D061CC1CACB4348B4302A4D /* AudioPlayerManager.swift */,
+				1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */,
+				BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */,
 			);
-			path = "Managers";
-			sourceTree = "<group>";
-		};
-		78EF4B0EA3FDA2A792BCF074 /* Views */ = {
-			isa = PBXGroup;
-			children = (
-				0A8C13525269D9F9FAC9D986,
-				930EFA48E3A26FC71286029C,
-				1FB262413094BEEEED5A63FB,
-				E8ED9E18FC3AF1C92CEA7187,
-				7F1FC408126E0511A26CB522,
-				B2C3D4E5F6A7B8C9D0E1F3A4,
-				D4E5F6A7B8C9D0E1F2A3B4C5,
-				AABB0011223344556677889C,
-			);
-			path = "Views";
-			sourceTree = "<group>";
-		};
-		D685C104AFFBCF83C7CB0FB6 /* rrradio */ = {
-			isa = PBXGroup;
-			children = (
-				54FD74C7D20B9C4F6C3F75CD,
-				F518AA2DB68FD64AB79B50D2,
-				BB11CC22DD33EE44FF550011,
-				AA11BB22CC33DD44EE55FF67,
-					CA608C0B22E7B6F9B389BDDD,
-				1EB0645B1049955C676EEE0B,
-				78EF4B0EA3FDA2A792BCF074,
-				FEB47FFD4B72FCD069C3F960,
-			);
-			path = "rrradio";
-			sourceTree = "<group>";
-		};
-		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				952F0E610EC52A3AAA09C37F,
-			);
-			name = "Products";
+			path = Managers;
 			sourceTree = "<group>";
 		};
 		5928955287B8089ED2177128 = {
@@ -121,11 +78,58 @@
 			);
 			sourceTree = "<group>";
 		};
+		78EF4B0EA3FDA2A792BCF074 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				0A8C13525269D9F9FAC9D986 /* ContentView.swift */,
+				930EFA48E3A26FC71286029C /* StationListView.swift */,
+				1FB262413094BEEEED5A63FB /* StationCardView.swift */,
+				E8ED9E18FC3AF1C92CEA7187 /* AddEditStationView.swift */,
+				7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */,
+				B2C3D4E5F6A7B8C9D0E1F3A4 /* StationImageView.swift */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */,
+				AABB0011223344556677889C /* DefaultImportView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		BF7A2D27A78D590BDEF15AF2 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				952F0E610EC52A3AAA09C37F /* rrradio.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		CA608C0B22E7B6F9B389BDDD /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		D685C104AFFBCF83C7CB0FB6 /* rrradio */ = {
+			isa = PBXGroup;
+			children = (
+				54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */,
+				F518AA2DB68FD64AB79B50D2 /* AppColors.swift */,
+				BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */,
+				AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */,
+				CA608C0B22E7B6F9B389BDDD /* Models */,
+				1EB0645B1049955C676EEE0B /* Managers */,
+				78EF4B0EA3FDA2A792BCF074 /* Views */,
+				FEB47FFD4B72FCD069C3F960 /* Info.plist */,
+			);
+			path = rrradio;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
+
 /* Begin PBXNativeTarget section */
 		2F55F8E22B05DB745E8608CD /* rrradio */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8E4708D4CFF2398BAD54D31A;
+			buildConfigurationList = 8E4708D4CFF2398BAD54D31A /* Build configuration list for PBXNativeTarget "rrradio" */;
 			buildPhases = (
 				D20362664F619485E1108F24 /* Sources */,
 				C4568555A963B9ABEFCBB534 /* Frameworks */,
@@ -141,6 +145,7 @@
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
+
 /* Begin PBXProject section */
 		46F86FAA6BBF9AC94A7E4595 /* Project object */ = {
 			isa = PBXProject;
@@ -154,7 +159,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B2BE817334BDE0D051010E74;
+			buildConfigurationList = B2BE817334BDE0D051010E74 /* Build configuration list for PBXProject "rrradio" */;
 			compatibilityVersion = "Xcode 14.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -163,7 +168,6 @@
 				Base,
 			);
 			mainGroup = 5928955287B8089ED2177128;
-			productsGroup = BF7A2D27A78D590BDEF15AF2 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -171,6 +175,7 @@
 			);
 		};
 /* End PBXProject section */
+
 /* Begin PBXResourcesBuildPhase section */
 		8A744E0F448DD92C91FBF92A /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
@@ -181,6 +186,7 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D20362664F619485E1108F24 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -206,7 +212,101 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
 /* Begin XCBuildConfiguration section */
+		9542E6F72F38AA9C9455B34E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MTL_FAST_MATH = YES;
+				SDKROOT = macosx;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+			};
+			name = Release;
+		};
+		CCC7287AFB24F1E973AE07DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 733426JK8V;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				INFOPLIST_FILE = rrradio/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		DA0A1A479C1A82190E6CBBC7 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 733426JK8V;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_INCOMING_NETWORK_CONNECTIONS = NO;
+				ENABLE_OUTGOING_NETWORK_CONNECTIONS = YES;
+				ENABLE_RESOURCE_ACCESS_AUDIO_INPUT = NO;
+				ENABLE_RESOURCE_ACCESS_BLUETOOTH = NO;
+				ENABLE_RESOURCE_ACCESS_CALENDARS = NO;
+				ENABLE_RESOURCE_ACCESS_CAMERA = NO;
+				ENABLE_RESOURCE_ACCESS_CONTACTS = NO;
+				ENABLE_RESOURCE_ACCESS_LOCATION = NO;
+				ENABLE_RESOURCE_ACCESS_PRINTING = NO;
+				ENABLE_RESOURCE_ACCESS_USB = NO;
+				INFOPLIST_FILE = rrradio/Info.plist;
+				MACOSX_DEPLOYMENT_TARGET = 13.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = macosx;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		F74568265A956002014F5B29 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -220,98 +320,36 @@
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				MTL_FAST_MATH = YES;
-				SDKROOT = macosx;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
 				);
-				ONLY_ACTIVE_ARCH = YES;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-			};
-			name = Debug;
-		};
-		9542E6F72F38AA9C9455B34E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ALWAYS_SEARCH_USER_PATHS = NO;
-				CLANG_ANALYZER_NONNULL = YES;
-				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
-				CLANG_ENABLE_OBJC_WEAK = YES;
-				COPY_PHASE_STRIP = NO;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				GCC_C_LANGUAGE_STANDARD = gnu17;
-				GCC_NO_COMMON_BLOCKS = YES;
 				MACOSX_DEPLOYMENT_TARGET = 13.0;
 				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
-				ENABLE_NS_ASSERTIONS = NO;
-				SWIFT_COMPILATION_MODE = wholemodule;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-			};
-			name = Release;
-		};
-		CCC7287AFB24F1E973AE07DA /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				CODE_SIGNING_REQUIRED = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				INFOPLIST_FILE = rrradio/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "nl.rrradio.app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		DA0A1A479C1A82190E6CBBC7 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Manual;
-				CODE_SIGNING_REQUIRED = NO;
-				COMBINE_HIDPI_IMAGES = YES;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				INFOPLIST_FILE = rrradio/Info.plist;
-				MACOSX_DEPLOYMENT_TARGET = 13.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "nl.rrradio.app";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SDKROOT = macosx;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
+
 /* Begin XCConfigurationList section */
-		B2BE817334BDE0D051010E74 /* Build configuration list for PBXProject "rrradio" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				F74568265A956002014F5B29 /* Debug */,
-				9542E6F72F38AA9C9455B34E /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		8E4708D4CFF2398BAD54D31A /* Build configuration list for PBXNativeTarget "rrradio" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				CCC7287AFB24F1E973AE07DA /* Debug */,
 				DA0A1A479C1A82190E6CBBC7 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B2BE817334BDE0D051010E74 /* Build configuration list for PBXProject "rrradio" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F74568265A956002014F5B29 /* Debug */,
+				9542E6F72F38AA9C9455B34E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
