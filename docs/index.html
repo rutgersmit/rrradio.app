@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rrradio — Simple radio for Mac</title>
+  <meta name="description" content="No subscription, no account. Just your favourite radio stations on Mac — and what's playing right now.">
+  <meta property="og:title" content="Rrradio — Simple radio for Mac">
+  <meta property="og:description" content="No subscription, no account. Just your favourite radio stations on Mac — and what's playing right now.">
+  <meta property="og:image" content="icon.png">
+  <link rel="icon" type="image/png" href="icon.png">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --orange: #F7941D;
+      --teal:   #26C6DA;
+      --grad:   linear-gradient(135deg, var(--orange), var(--teal));
+      --text:   #1a1a1a;
+      --muted:  #666;
+      --card-bg: rgba(255,255,255,0.72);
+      --radius: 18px;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: #f5f5f7;
+      overflow-x: hidden;
+    }
+
+    /* ── Hero ─────────────────────────────────────── */
+    .hero {
+      position: relative;
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background: url('bg.png') center/cover no-repeat;
+      filter: blur(2px) saturate(1.1);
+      transform: scale(1.04);
+    }
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0.70);
+    }
+
+    .hero > * { position: relative; }
+
+    .app-icon {
+      width: 120px;
+      height: 120px;
+      border-radius: 26px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+      margin-bottom: 28px;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      background: var(--grad);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+    }
+
+    .hero .tagline {
+      margin-top: 16px;
+      font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+      color: var(--muted);
+      max-width: 480px;
+      line-height: 1.5;
+    }
+
+    .cta-group {
+      margin-top: 40px;
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .btn-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 26px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform .15s, box-shadow .15s;
+      background: var(--grad);
+      color: #fff;
+      box-shadow: 0 6px 24px rgba(247,148,29,0.30);
+    }
+
+    .btn-store:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 32px rgba(247,148,29,0.38);
+    }
+
+    .btn-store svg { flex-shrink: 0; }
+
+    /* ── Section ──────────────────────────────────── */
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 80px 24px;
+    }
+
+    section h2 {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 48px;
+      text-align: center;
+    }
+
+    /* ── Feature grid ─────────────────────────────── */
+    .features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: var(--card-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.85);
+      border-radius: var(--radius);
+      padding: 32px 28px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    }
+
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: var(--grad);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      font-size: 22px;
+    }
+
+    .card h3 {
+      font-size: 1.05rem;
+      font-weight: 650;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      font-size: 0.92rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    /* ── Station logos strip ──────────────────────── */
+    .logos-section {
+      background: white;
+      border-top: 1px solid #e8e8e8;
+      border-bottom: 1px solid #e8e8e8;
+    }
+
+    .logos-section h2 {
+      margin-bottom: 32px;
+    }
+
+    .logos-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logos-strip img {
+      width: 56px;
+      height: 56px;
+      border-radius: 12px;
+      object-fit: cover;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.10);
+      opacity: 0.9;
+      transition: opacity .15s, transform .15s;
+    }
+
+    .logos-strip img:hover {
+      opacity: 1;
+      transform: scale(1.08);
+    }
+
+    .logos-note {
+      text-align: center;
+      margin-top: 24px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    /* ── Bottom CTA ───────────────────────────────── */
+    .bottom-cta {
+      text-align: center;
+      padding: 80px 24px;
+    }
+
+    .bottom-cta h2 {
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+
+    .bottom-cta p {
+      color: var(--muted);
+      font-size: 1.05rem;
+      margin-bottom: 36px;
+    }
+
+    /* ── Footer ───────────────────────────────────── */
+    footer {
+      text-align: center;
+      padding: 28px 24px;
+      font-size: 0.82rem;
+      color: #aaa;
+      border-top: 1px solid #e8e8e8;
+    }
+
+    footer a { color: #aaa; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #111; color: #f0f0f0; }
+      :root { --text: #f0f0f0; --muted: #999; --card-bg: rgba(40,40,42,0.80); }
+      .hero-overlay { background: rgba(0,0,0,0.55); }
+      .logos-section { background: #1c1c1e; border-color: #2c2c2e; }
+      footer { border-color: #2c2c2e; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Hero ──────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <img src="icon.png" alt="Rrradio app icon" class="app-icon">
+  <h1>Rrradio</h1>
+  <p class="tagline">No subscription, no account. Just your favourite radio stations on Mac — and what's playing right now.</p>
+
+  <div class="cta-group">
+    <a href="https://apps.apple.com/app/rrradio/id_PLACEHOLDER" class="btn-store">
+      <!-- Apple logo -->
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+      </svg>
+      Download on the Mac App Store
+    </a>
+  </div>
+</div>
+
+<!-- ── Features ───────────────────────────────────────── -->
+<section>
+  <h2>Everything you need. Nothing you don't.</h2>
+  <div class="features">
+    <div class="card">
+      <div class="card-icon">🎵</div>
+      <h3>See what's playing</h3>
+      <p>Live artist and track info from the stream, with album artwork fetched automatically. Appears in Control Center too.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">📻</div>
+      <h3>Your stations</h3>
+      <p>Start with a curated selection of stations from the Netherlands, Belgium, France, Germany, and the UK — or add any stream by URL.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">⌨️</div>
+      <h3>Media keys just work</h3>
+      <p>Play, pause, and skip using your keyboard. Rrradio integrates natively with macOS so you never have to switch apps.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🔄</div>
+      <h3>Reliable by design</h3>
+      <p>Reconnects automatically if a stream drops. Remembers your last station so the music picks up right where you left off.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🚫</div>
+      <h3>No account needed</h3>
+      <p>No sign-up, no subscription, no tracking. Download the app and start listening. That's it.</p>
+    </div>
+    <div class="card">
+      <div class="card-icon">🎨</div>
+      <h3>Make it yours</h3>
+      <p>Add any internet radio stream, give it a custom name and logo, and reorder your list however you like.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── Station logos ──────────────────────────────────── -->
+<div class="logos-section">
+  <section>
+    <h2>Stations included out of the box</h2>
+    <div class="logos-strip">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/nporadio1.png" alt="NPO Radio 1">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/nporadio2.png" alt="NPO Radio 2">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/3fm.png" alt="3FM">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/radio538.png" alt="Radio 538">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/qmusic.png" alt="Qmusic">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/kink.png" alt="KINK">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/veronica.png" alt="Radio Veronica">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/radio10.png" alt="Radio 10">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/joe.png" alt="Joe">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/netherlands/skyradio.png" alt="Sky Radio">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/belgium/radio1.png" alt="Radio 1 BE">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/belgium/mnm.png" alt="MNM">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/belgium/stubru.png" alt="Studio Brussel">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/england/bbcradio2.png" alt="BBC Radio 2">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/england/capitalfm.png" alt="Capital FM">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/england/heartradio.png" alt="Heart Radio">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/france/nrj.png" alt="NRJ">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/france/franceinter.png" alt="France Inter">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/germany/antennebayern.png" alt="Antenne Bayern">
+      <img src="https://raw.githubusercontent.com/rutgersmit/rrradio.app/main/assets/default-stations/germany/80s80s.png" alt="80s80s">
+    </div>
+    <p class="logos-note">And more — or add any station you like.</p>
+  </section>
+</div>
+
+<!-- ── Bottom CTA ─────────────────────────────────────── -->
+<div class="bottom-cta">
+  <h2>Just press play.</h2>
+  <p>Free on the Mac App Store. macOS 13 or later.</p>
+  <a href="https://apps.apple.com/app/rrradio/id_PLACEHOLDER" class="btn-store">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+    </svg>
+    Download on the Mac App Store
+  </a>
+</div>
+
+<!-- ── Footer ─────────────────────────────────────────── -->
+<footer>
+  <p>© 2026 Rrradio &nbsp;·&nbsp; <a href="privacy.html">Privacy Policy</a></p>
+</footer>
+
+</body>
+</html>
