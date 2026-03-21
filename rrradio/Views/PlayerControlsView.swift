@@ -72,6 +72,7 @@ struct PlayerControlsView: View {
                 }
                 .buttonStyle(.plain)
                 .disabled(player.currentStation == nil)
+                .accessibilityLabel(player.isLoading ? "Connecting" : player.isReconnecting ? "Reconnecting" : player.isPlaying ? "Stop" : "Play")
 
                 // Volume
                 HStack(spacing: 4) {
@@ -82,16 +83,19 @@ struct PlayerControlsView: View {
                     }
                     .buttonStyle(.plain)
                     .focusable(false)
-                    .help(player.isMuted ? "Dempen opheffen" : "Dempen")
+                    .help(player.isMuted ? "Unmute" : "Mute")
+                    .accessibilityLabel(player.isMuted ? "Unmute" : "Mute")
 
                     Slider(value: $player.volume, in: 0...1)
                         .frame(width: 80)
                         .tint(.rrAccent)
                         .focusable(false)
+                        .accessibilityLabel("Volume")
 
                     Image(systemName: "speaker.wave.3.fill")
                         .font(.system(size: 10))
                         .foregroundColor(.rrSecondaryText)
+                        .accessibilityHidden(true)
                 }
             }
             .padding(.horizontal, 16)
@@ -113,6 +117,7 @@ struct ArtworkModalView: View {
 
     @State private var displayedImage: NSImage?
     @State private var imageOpacity: Double = 1.0
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     init(artworkData: Data?, station: RadioStation?, songTitle: String?, artist: String?, track: String?, stationName: String?, availableSize: CGSize, onDismiss: @escaping () -> Void) {
         self.artworkData = artworkData
@@ -159,10 +164,14 @@ struct ArtworkModalView: View {
             .padding(.horizontal, 32)
             .onTapGesture { onDismiss() }
             .onChange(of: artworkData) { newData in
-                withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                if reduceMotion {
                     displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
-                    withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
+                } else {
+                    withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                        withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
+                    }
                 }
             }
 

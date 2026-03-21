@@ -5,6 +5,7 @@ struct ContentView: View {
     @StateObject private var player = AudioPlayerManager.shared
     @State private var showArtworkModal = false
     @State private var modalArtworkData: Data? = nil
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         VStack(spacing: 0) {
@@ -22,7 +23,7 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 500, minHeight: 400)
-        .animation(.easeInOut(duration: 0.4), value: player.currentArtworkData)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: player.currentArtworkData)
         .overlay(alignment: .bottomLeading) {
             if let artworkData = player.currentArtworkData,
                let nsImage = NSImage(data: artworkData) {

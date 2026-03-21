@@ -10,6 +10,16 @@ struct StationCardView: View {
     let onDelete: () -> Void
 
     @State private var isHovered = false
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+
+    private var accessibilityLabel: String {
+        var parts: [String] = []
+        if isPlaying { parts.append("Now playing") }
+        else if isLoading { parts.append("Connecting") }
+        parts.append(station.name)
+        if hasError { parts.append("stream error") }
+        return parts.joined(separator: ", ")
+    }
 
     var body: some View {
         ZStack(alignment: .bottomLeading) {
@@ -70,6 +80,7 @@ struct StationCardView: View {
                             .clipShape(Circle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Edit \(station.name)")
 
                     Button(action: onDelete) {
                         Image(systemName: "trash")
@@ -80,6 +91,7 @@ struct StationCardView: View {
                             .clipShape(Circle())
                     }
                     .buttonStyle(.plain)
+                    .accessibilityLabel("Delete \(station.name)")
                 }
                 .padding(6)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
@@ -101,10 +113,16 @@ struct StationCardView: View {
             x: 0, y: 2
         )
         .scaleEffect(isHovered ? 1.03 : 1.0)
-        .animation(.easeInOut(duration: 0.15), value: isHovered)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: isHovered)
         .onHover { isHovered = $0 }
         .onTapGesture(perform: onTap)
         .cursor(.pointingHand)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel)
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction(named: "Edit") { onEdit() }
+        .accessibilityAction(named: "Delete") { onDelete() }
+        .accessibilityAction(.default) { onTap() }
     }
 
 }
