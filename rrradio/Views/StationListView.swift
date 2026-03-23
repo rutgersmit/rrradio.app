@@ -99,6 +99,7 @@ struct StationListView: View {
 
     @ViewBuilder
     private var stationShortcuts: some View {
+        #if os(macOS)
         ForEach(0..<min(9, store.stations.count), id: \.self) { index in
             Button("") {
                 guard index < store.stations.count else { return }
@@ -108,6 +109,7 @@ struct StationListView: View {
             .opacity(0)
             .frame(width: 0, height: 0)
         }
+        #endif
     }
 
     private func handleTap(_ station: RadioStation) {
