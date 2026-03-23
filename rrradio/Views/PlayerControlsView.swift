@@ -115,7 +115,7 @@ struct ArtworkModalView: View {
     let availableSize: CGSize
     let onDismiss: () -> Void
 
-    @State private var displayedImage: NSImage?
+    @State private var displayedImage: Image?
     @State private var imageOpacity: Double = 1.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -128,7 +128,7 @@ struct ArtworkModalView: View {
         self.stationName = stationName
         self.availableSize = availableSize
         self.onDismiss = onDismiss
-        self._displayedImage = State(initialValue: artworkData.flatMap { NSImage(data: $0) })
+        self._displayedImage = State(initialValue: artworkData.flatMap { Image(data: $0) })
     }
 
     private var artworkDimension: CGFloat {
@@ -141,7 +141,7 @@ struct ArtworkModalView: View {
         VStack(spacing: 0) {
             ZStack {
                 if let img = displayedImage {
-                    Image(nsImage: img)
+                    img
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 } else if let station = station {
@@ -165,11 +165,11 @@ struct ArtworkModalView: View {
             .onTapGesture { onDismiss() }
             .onChange(of: artworkData) { newData in
                 if reduceMotion {
-                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
                 } else {
                     withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
                         withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
                     }
                 }

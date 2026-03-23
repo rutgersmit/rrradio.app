@@ -11,8 +11,10 @@ struct rrradioApp: App {
         WindowGroup {
             ContentView()
         }
+        #if os(macOS)
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified)
+        #endif
         .commands {
             CommandGroup(replacing: .newItem) {}
         }

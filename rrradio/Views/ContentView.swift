@@ -13,6 +13,7 @@ struct ContentView: View {
             PlayerControlsView(player: player)
         }
         .background {
+            #if os(macOS)
             if let bg = NSImage(named: "bg") {
                 Image(nsImage: bg)
                     .resizable()
@@ -21,14 +22,24 @@ struct ContentView: View {
                     .clipped()
                     .overlay(Color.white.opacity(0.85))
             }
+            #else
+            Image("bg")
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .overlay(Color.white.opacity(0.85))
+            #endif
         }
+        #if os(macOS)
         .frame(minWidth: 500, minHeight: 400)
+        #endif
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: player.currentArtworkData)
         .overlay(alignment: .bottomLeading) {
             if let artworkData = player.currentArtworkData,
-               let nsImage = NSImage(data: artworkData) {
+               let artworkImage = Image(data: artworkData) {
                 Button(action: { modalArtworkData = artworkData; showArtworkModal = true }) {
-                    Image(nsImage: nsImage)
+                    artworkImage
                         .resizable()
                         .aspectRatio(contentMode: .fill)
                         .frame(width: 100, height: 100)

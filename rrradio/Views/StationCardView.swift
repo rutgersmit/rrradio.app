@@ -116,7 +116,9 @@ struct StationCardView: View {
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.15), value: isHovered)
         .onHover { isHovered = $0 }
         .onTapGesture(perform: onTap)
+        #if os(macOS)
         .cursor(.pointingHand)
+        #endif
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessibilityLabel)
         .accessibilityAddTraits(.isButton)
@@ -127,8 +129,9 @@ struct StationCardView: View {
 
 }
 
-// MARK: - Cursor helper
+// MARK: - Cursor helper (macOS only)
 
+#if os(macOS)
 extension View {
     func cursor(_ cursor: NSCursor) -> some View {
         self.onHover { inside in
@@ -136,3 +139,4 @@ extension View {
         }
     }
 }
+#endif
