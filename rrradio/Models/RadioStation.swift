@@ -1,5 +1,9 @@
 import Foundation
+#if os(macOS)
 import AppKit
+#else
+import UIKit
+#endif
 
 struct RadioStation: Identifiable, Codable, Hashable {
     var id: UUID
@@ -31,10 +35,14 @@ extension RadioStation {
     }
 
     static func assetData(_ name: String) -> Data? {
+        #if os(macOS)
         guard let image = NSImage(named: name),
               let tiff = image.tiffRepresentation,
               let rep = NSBitmapImageRep(data: tiff)
         else { return nil }
         return rep.representation(using: .png, properties: [:])
+        #else
+        return UIImage(named: name)?.pngData()
+        #endif
     }
 }
