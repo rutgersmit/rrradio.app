@@ -8,33 +8,48 @@ struct ContentView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
+        mainContent
+            .background { backgroundView }
+            .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: player.currentArtworkData)
+            .onChange(of: player.currentArtworkData) { newData in
+                modalArtworkData = newData
+            }
+            .sheet(isPresented: $store.needsDefaultsPrompt) {
+                DefaultImportView(store: store)
+            }
+            #if os(iOS)
+            .sheet(isPresented: $showArtworkModal) {
+                GeometryReader { geo in
+                    ArtworkModalView(
+                        artworkData: modalArtworkData,
+                        station: player.currentStation,
+                        songTitle: player.currentSongTitle,
+                        artist: player.currentArtist,
+                        track: player.currentTrack,
+                        stationName: player.currentStation?.name,
+                        availableSize: geo.size,
+                        onDismiss: { showArtworkModal = false }
+                    )
+                }
+                .presentationDetents([.large])
+            }
+            #endif
+            .onAppear {
+                setupRemoteCommands()
+                resumeLastStation()
+            }
+    }
+
+    // MARK: - Platform layouts
+
+    @ViewBuilder
+    private var mainContent: some View {
+        #if os(macOS)
         VStack(spacing: 0) {
             StationListView(store: store, player: player)
             PlayerControlsView(player: player)
         }
-        .background {
-            #if os(macOS)
-            if let bg = NSImage(named: "bg") {
-                Image(nsImage: bg)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(maxWidth: .infinity, maxHeight: .infinity)
-                    .clipped()
-                    .overlay(Color.white.opacity(0.85))
-            }
-            #else
-            Image("bg")
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .clipped()
-                .overlay(Color.white.opacity(0.85))
-            #endif
-        }
-        #if os(macOS)
         .frame(minWidth: 500, minHeight: 400)
-        #endif
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.4), value: player.currentArtworkData)
         .overlay(alignment: .bottomLeading) {
             if let artworkData = player.currentArtworkData,
                let artworkImage = Image(data: artworkData) {
@@ -77,17 +92,43 @@ struct ContentView: View {
                 }
             }
         }
-        .onChange(of: player.currentArtworkData) { newData in
-            modalArtworkData = newData
+        #else
+        NavigationStack {
+            StationListView(store: store, player: player)
+                .navigationTitle("rrradio")
+                .navigationBarTitleDisplayMode(.large)
         }
-        .sheet(isPresented: $store.needsDefaultsPrompt) {
-            DefaultImportView(store: store)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            PlayerControlsView(player: player, onArtworkTap: {
+                modalArtworkData = player.currentArtworkData
+                showArtworkModal = true
+            })
         }
-        .onAppear {
-            setupRemoteCommands()
-            resumeLastStation()
-        }
+        #endif
     }
+
+    @ViewBuilder
+    private var backgroundView: some View {
+        #if os(macOS)
+        if let bg = NSImage(named: "bg") {
+            Image(nsImage: bg)
+                .resizable()
+                .scaledToFill()
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
+                .overlay(Color.white.opacity(0.85))
+        }
+        #else
+        Image("bg")
+            .resizable()
+            .scaledToFill()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .clipped()
+            .overlay(Color.white.opacity(0.85))
+        #endif
+    }
+
+    // MARK: - Helpers
 
     private func setupRemoteCommands() {
         NowPlayingManager.shared.configure(
