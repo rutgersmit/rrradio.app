@@ -1,5 +1,9 @@
 import SwiftUI
+#if os(macOS)
 import UniformTypeIdentifiers
+#elseif os(iOS)
+import PhotosUI
+#endif
 
 struct AddEditStationView: View {
     @Environment(\.dismiss) private var dismiss
@@ -11,8 +15,12 @@ struct AddEditStationView: View {
     @State private var streamURL: String = ""
     @State private var localImageData: Data? = nil
 
-    @State private var pickedImage: NSImage? = nil
+    @State private var pickedImage: CGImage? = nil
     @State private var showCrop = false
+
+    #if os(iOS)
+    @State private var photosPickerItem: PhotosPickerItem? = nil
+    #endif
 
     enum Field { case name }
     @FocusState private var focusedField: Field?
@@ -53,9 +61,9 @@ struct AddEditStationView: View {
                 }
 
                 Section("Image") {
-                    if let data = localImageData, let img = NSImage(data: data) {
+                    if let data = localImageData, let img = Image(data: data) {
                         HStack(spacing: 10) {
-                            Image(nsImage: img)
+                            img
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 44, height: 44)
@@ -74,21 +82,18 @@ struct AddEditStationView: View {
 
                             Spacer()
 
-                            Button("Change") { pickImage() }
-                                .buttonStyle(.plain)
-                                .font(.system(size: 12))
-                                .foregroundColor(.rrAccent)
+                            changeImageButton
                         }
                     } else {
-                        Button("Choose image…") { pickImage() }
+                        chooseImageButton
                     }
                 }
 
                 // Preview
-                if let data = localImageData, let img = NSImage(data: data) {
+                if let data = localImageData, let img = Image(data: data) {
                     Section("Preview") {
                         HStack {
-                            Image(nsImage: img)
+                            img
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: 60, height: 60)
@@ -130,11 +135,13 @@ struct AddEditStationView: View {
             }
             .padding()
         }
+        #if os(macOS)
         .frame(width: 420)
+        #endif
         .sheet(isPresented: $showCrop) {
             if let img = pickedImage {
                 ImageCropView(
-                    nsImage: img,
+                    image: img,
                     onCrop: { data in
                         localImageData = data
                         showCrop = false
@@ -145,6 +152,20 @@ struct AddEditStationView: View {
                 )
             }
         }
+        #if os(iOS)
+        .onChange(of: photosPickerItem) { item in
+            Task {
+                guard let item,
+                      let data = try? await item.loadTransferable(type: Data.self),
+                      data.count <= URLSecurityPolicy.maxLocalImageBytes,
+                      let uiImage = UIImage(data: data),
+                      let cgImage = uiImage.cgImage else { return }
+                pickedImage = cgImage
+                showCrop = true
+                photosPickerItem = nil
+            }
+        }
+        #endif
         .onAppear {
             if let station = existing {
                 name = station.name
@@ -155,6 +176,34 @@ struct AddEditStationView: View {
         }
     }
 
+    @ViewBuilder
+    private var chooseImageButton: some View {
+        #if os(macOS)
+        Button("Choose image…") { pickImage() }
+        #else
+        PhotosPicker(selection: $photosPickerItem, matching: .images) {
+            Text("Choose image…")
+        }
+        #endif
+    }
+
+    @ViewBuilder
+    private var changeImageButton: some View {
+        #if os(macOS)
+        Button("Change") { pickImage() }
+            .buttonStyle(.plain)
+            .font(.system(size: 12))
+            .foregroundColor(.rrAccent)
+        #else
+        PhotosPicker(selection: $photosPickerItem, matching: .images) {
+            Text("Change")
+                .font(.system(size: 12))
+                .foregroundColor(.rrAccent)
+        }
+        #endif
+    }
+
+    #if os(macOS)
     private func pickImage() {
         let panel = NSOpenPanel()
         panel.allowedContentTypes = [.image]
@@ -169,10 +218,11 @@ struct AddEditStationView: View {
            fileSize <= URLSecurityPolicy.maxLocalImageBytes,
            let data = try? Data(contentsOf: url),
            data.count <= URLSecurityPolicy.maxLocalImageBytes,
-           let image = NSImage(data: data) {
-            pickedImage = image
+           let nsImage = NSImage(data: data),
+           let cgImage = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+            pickedImage = cgImage
             showCrop = true
         }
     }
+    #endif
 }
-

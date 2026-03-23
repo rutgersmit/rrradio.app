@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct ImageCropView: View {
-    let nsImage: NSImage
+    let image: CGImage
     var onCrop: (Data) -> Void
     var onCancel: () -> Void
 
@@ -11,8 +11,9 @@ struct ImageCropView: View {
     @State private var dragBase: CGSize = .zero
 
     private var aspect: CGFloat {
-        guard nsImage.size.height > 0 else { return 1 }
-        return nsImage.size.width / nsImage.size.height
+        let h = CGFloat(image.height)
+        guard h > 0 else { return 1 }
+        return CGFloat(image.width) / h
     }
 
     // Scale to fill the crop square
@@ -46,7 +47,7 @@ struct ImageCropView: View {
             ZStack {
                 Color.black
 
-                Image(nsImage: nsImage)
+                Image(image, scale: 1.0, label: Text(""))
                     .resizable()
                     .frame(width: scaledSize.width, height: scaledSize.height)
                     .offset(offset)
@@ -83,7 +84,9 @@ struct ImageCropView: View {
             .padding(.bottom, 4)
         }
         .padding(24)
+        #if os(macOS)
         .frame(width: 340)
+        #endif
     }
 
     // Render the visible crop area to PNG data at 2x resolution
@@ -110,12 +113,15 @@ struct ImageCropView: View {
         let ry = ((s - sh) / 2 - offset.height) * scale
         let rect = CGRect(x: rx, y: ry, width: sw * scale, height: sh * scale)
 
-        if let cg = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-            context.draw(cg, in: rect)
-        }
+        context.draw(image, in: rect)
 
         guard let result = context.makeImage() else { return nil }
+
+        #if os(macOS)
         let rep = NSBitmapImageRep(cgImage: result)
         return rep.representation(using: .png, properties: [:])
+        #else
+        return UIImage(cgImage: result).pngData()
+        #endif
     }
 }
