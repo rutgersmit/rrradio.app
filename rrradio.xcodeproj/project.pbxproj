@@ -20,10 +20,10 @@
 		B13B885280DDDE5FF3D5024B /* NowPlayingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1843C4017B86A53E68AFD07D /* NowPlayingManager.swift */; };
 		BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */; };
 		BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */; };
+		BE563FA72F72C1920077547A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BE563FA62F72C1920077547A /* PrivacyInfo.xcprivacy */; };
+		BE563FA82F72C1920077547A /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = BE563FA62F72C1920077547A /* PrivacyInfo.xcprivacy */; };
 		C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */; };
 		CC2CCA6E7ED999144EA94255 /* StationListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 930EFA48E3A26FC71286029C /* StationListView.swift */; };
-		F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8C13525269D9F9FAC9D986 /* ContentView.swift */; };
-		F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */; };
 		DD11EE22FF3300441155AA01 /* rrradioApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */; };
 		DD11EE22FF3300441155AA02 /* AppColors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F518AA2DB68FD64AB79B50D2 /* AppColors.swift */; };
 		DD11EE22FF3300441155AA03 /* RadioStation.swift in Sources */ = {isa = PBXBuildFile; fileRef = BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */; };
@@ -41,6 +41,8 @@
 		DD11EE22FF3300441155AA0F /* RemoteConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */; };
 		DD11EE22FF3300441155AA10 /* CatalogFetcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */; };
 		DD11EE22FF3300441155AA11 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA11BB22CC33DD44EE55FF67 /* Assets.xcassets */; };
+		F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0A8C13525269D9F9FAC9D986 /* ContentView.swift */; };
+		F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7F1FC408126E0511A26CB522 /* PlayerControlsView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +60,7 @@
 		BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfig.swift; sourceTree = "<group>"; };
 		BB11CC22DD33EE44FF550013 /* CatalogFetcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogFetcher.swift; sourceTree = "<group>"; };
 		BD9EE54E36C7ACB9F2FCE651 /* RadioStation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioStation.swift; sourceTree = "<group>"; };
+		BE563FA62F72C1920077547A /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		CC11DD22EE33FF4400556677 /* rrradio-iOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "rrradio-iOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC11DD22EE33FF4400556678 /* Info-iOS.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Info-iOS.plist"; sourceTree = "<group>"; };
 		D4E5F6A7B8C9D0E1F2A3B4C5 /* ImageCropView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCropView.swift; sourceTree = "<group>"; };
@@ -139,6 +142,7 @@
 		D685C104AFFBCF83C7CB0FB6 /* rrradio */ = {
 			isa = PBXGroup;
 			children = (
+				BE563FA62F72C1920077547A /* PrivacyInfo.xcprivacy */,
 				54FD74C7D20B9C4F6C3F75CD /* rrradioApp.swift */,
 				F518AA2DB68FD64AB79B50D2 /* AppColors.swift */,
 				BB11CC22DD33EE44FF550011 /* RemoteConfig.swift */,
@@ -230,6 +234,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE563FA82F72C1920077547A /* PrivacyInfo.xcprivacy in Resources */,
 				AA11BB22CC33DD44EE55FF66 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -238,6 +243,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BE563FA72F72C1920077547A /* PrivacyInfo.xcprivacy in Resources */,
 				DD11EE22FF3300441155AA11 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -245,29 +251,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		D20362664F619485E1108F24 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				265BA5D12A3F41A07C9729D8 /* rrradioApp.swift in Sources */,
-				1DD3444F044D066FF0907FE4 /* AppColors.swift in Sources */,
-				06ECA306B51AB90E9D0F7663 /* RadioStation.swift in Sources */,
-				57D309B5B1542247B84D652C /* StationStore.swift in Sources */,
-				77011F3AFC22F57AF645B55D /* AudioPlayerManager.swift in Sources */,
-				B13B885280DDDE5FF3D5024B /* NowPlayingManager.swift in Sources */,
-				F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */,
-				CC2CCA6E7ED999144EA94255 /* StationListView.swift in Sources */,
-				05B3E845022386CD7BA30C8E /* StationCardView.swift in Sources */,
-				AF361939E582EEBDABE838F5 /* AddEditStationView.swift in Sources */,
-				F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */,
-				A1B2C3D4E5F6A7B8C9D0E1F2 /* StationImageView.swift in Sources */,
-				C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */,
-				AABB0011223344556677889D /* DefaultImportView.swift in Sources */,
-				BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */,
-				BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		CC11DD22EE33FF4400556679 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -288,6 +271,29 @@
 				DD11EE22FF3300441155AA0E /* DefaultImportView.swift in Sources */,
 				DD11EE22FF3300441155AA0F /* RemoteConfig.swift in Sources */,
 				DD11EE22FF3300441155AA10 /* CatalogFetcher.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		D20362664F619485E1108F24 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				265BA5D12A3F41A07C9729D8 /* rrradioApp.swift in Sources */,
+				1DD3444F044D066FF0907FE4 /* AppColors.swift in Sources */,
+				06ECA306B51AB90E9D0F7663 /* RadioStation.swift in Sources */,
+				57D309B5B1542247B84D652C /* StationStore.swift in Sources */,
+				77011F3AFC22F57AF645B55D /* AudioPlayerManager.swift in Sources */,
+				B13B885280DDDE5FF3D5024B /* NowPlayingManager.swift in Sources */,
+				F3EB1DD40F7AFFCF4C5B2777 /* ContentView.swift in Sources */,
+				CC2CCA6E7ED999144EA94255 /* StationListView.swift in Sources */,
+				05B3E845022386CD7BA30C8E /* StationCardView.swift in Sources */,
+				AF361939E582EEBDABE838F5 /* AddEditStationView.swift in Sources */,
+				F8569235C6C5D2C2F67F90BE /* PlayerControlsView.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* StationImageView.swift in Sources */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* ImageCropView.swift in Sources */,
+				AABB0011223344556677889D /* DefaultImportView.swift in Sources */,
+				BB11CC22DD33EE44FF550012 /* RemoteConfig.swift in Sources */,
+				BB11CC22DD33EE44FF550014 /* CatalogFetcher.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -316,10 +322,60 @@
 			};
 			name = Release;
 		};
+		CC11DD22EE33FF440055667D /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = 733426JK8V;
+				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		CC11DD22EE33FF440055667E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = 733426JK8V;
+				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		CCC7287AFB24F1E973AE07DA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -356,6 +412,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGNING_REQUIRED = NO;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
@@ -412,55 +469,6 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
-		};
-		CC11DD22EE33FF440055667D /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
-				DEVELOPMENT_TEAM = 733426JK8V;
-				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Debug;
-		};
-		CC11DD22EE33FF440055667E /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGNING_REQUIRED = NO;
-				CODE_SIGN_IDENTITY = "Apple Development";
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = 733426JK8V;
-				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE_SPECIFIER = "";
-				SDKROOT = iphoneos;
-				SWIFT_EMIT_LOC_STRINGS = YES;
-				SWIFT_OPTIMIZATION_LEVEL = "-O";
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-			};
-			name = Release;
 		};
 /* End XCBuildConfiguration section */
 

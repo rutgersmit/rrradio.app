@@ -34,8 +34,13 @@
 	<array>
 		<string>audio</string>
 	</array>
+	<key>LSApplicationCategoryType</key>
+	<string>public.app-category.music</string>
 	<key>UILaunchScreen</key>
-	<dict/>
+	<dict>
+		<key>UIColorName</key>
+		<string>AppBackground</string>
+	</dict>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

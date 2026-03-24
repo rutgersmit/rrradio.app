@@ -1,7 +1,6 @@
 import SwiftUI
-#if os(macOS)
 import UniformTypeIdentifiers
-#elseif os(iOS)
+#if os(iOS)
 import PhotosUI
 #endif
 
@@ -20,6 +19,29 @@ struct AddEditStationView: View {
 
     #if os(iOS)
     @State private var photosPickerItem: PhotosPickerItem? = nil
+    #endif
+
+    #if os(macOS)
+    private func pickImage() {
+            let panel = NSOpenPanel()
+            panel.allowedContentTypes = [.image]
+            panel.canChooseFiles = true
+            panel.canChooseDirectories = false
+            panel.allowsMultipleSelection = false
+            panel.message = "Choose an image for the station"
+            if panel.runModal() == .OK,
+               let url = panel.url,
+               let values = try? url.resourceValues(forKeys: [.fileSizeKey]),
+               let fileSize = values.fileSize,
+               fileSize <= URLSecurityPolicy.maxLocalImageBytes,
+               let data = try? Data(contentsOf: url),
+               data.count <= URLSecurityPolicy.maxLocalImageBytes,
+               let nsImage = NSImage(data: data),
+               let cgImage = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil) {
+                pickedImage = cgImage
+                showCrop = true
+            }
+        }
     #endif
 
     enum Field { case name }
@@ -58,6 +80,11 @@ struct AddEditStationView: View {
                     TextField("Name", text: $name)
                         .focused($focusedField, equals: .name)
                     TextField("Stream URL", text: $streamURL)
+                    if !streamURL.isEmpty && normalizedStreamURL == nil {
+                        Text("Only HTTPS stream URLs are supported.")
+                            .font(.caption)
+                            .foregroundColor(.red)
+                    }
                 }
 
                 Section("Image") {
@@ -203,26 +230,4 @@ struct AddEditStationView: View {
         #endif
     }
 
-    #if os(macOS)
-    private func pickImage() {
-        let panel = NSOpenPanel()
-        panel.allowedContentTypes = [.image]
-        panel.canChooseFiles = true
-        panel.canChooseDirectories = false
-        panel.allowsMultipleSelection = false
-        panel.message = "Choose an image for the station"
-        if panel.runModal() == .OK,
-           let url = panel.url,
-           let values = try? url.resourceValues(forKeys: [.fileSizeKey]),
-           let fileSize = values.fileSize,
-           fileSize <= URLSecurityPolicy.maxLocalImageBytes,
-           let data = try? Data(contentsOf: url),
-           data.count <= URLSecurityPolicy.maxLocalImageBytes,
-           let nsImage = NSImage(data: data),
-           let cgImage = nsImage.cgImage(forProposedRect: nil, context: nil, hints: nil) {
-            pickedImage = cgImage
-            showCrop = true
-        }
-    }
-    #endif
 }

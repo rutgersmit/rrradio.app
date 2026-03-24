@@ -13,12 +13,6 @@ class StationStore: ObservableObject {
         load()
     }
 
-    func importDefaults() {
-        stations = RadioStation.defaults
-        needsDefaultsPrompt = false
-        save()
-    }
-
     func importFromCatalog(_ countries: [CountryEntry]) async {
         let items: [(index: Int, directory: String, entry: StationEntry)] = countries.enumerated().flatMap { (ci, country) in
             country.stations.enumerated().map { (si, entry) in
@@ -35,7 +29,6 @@ class StationStore: ObservableObject {
                     }
 
                     let imageData = await CatalogFetcher.fetchImageData(directory: item.directory, filename: item.entry.image)
-                        ?? RadioStation.assetData((item.entry.image as NSString).deletingPathExtension)
 
                     let station = RadioStation(
                         name: item.entry.name,
