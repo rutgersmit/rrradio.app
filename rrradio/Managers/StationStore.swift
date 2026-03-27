@@ -82,9 +82,10 @@ class StationStore: ObservableObject {
            let decoded = try? JSONDecoder().decode([RadioStation].self, from: data) {
             stations = decoded.compactMap(normalized(station:))
         }
-        if stations.isEmpty {
-            needsDefaultsPrompt = true
-        }
+        // import prompt disabled for now — re-enable when needed
+        // if stations.isEmpty {
+        //     needsDefaultsPrompt = true
+        // }
     }
 
     private func save() {
