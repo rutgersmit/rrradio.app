@@ -2,6 +2,7 @@ import SwiftUI
 
 struct PlayerControlsView: View {
     @ObservedObject var player: AudioPlayerManager
+    var onArtworkTap: (() -> Void)? = nil
 
     private var statusText: String {
         if player.isLoading { return "Connecting…" }
@@ -14,9 +15,25 @@ struct PlayerControlsView: View {
         VStack(spacing: 0) {
             Divider()
             HStack(spacing: 14) {
-                // Placeholder for artwork / station logo
-                if player.currentArtworkData != nil {
+                // Leading slot: artwork or station logo
+                if let artworkData = player.currentArtworkData {
+                    #if os(macOS)
+                    // Space reserved for the floating thumbnail overlay in ContentView
                     Color.clear.frame(width: 100, height: 42)
+                    #else
+                    // Show tappable artwork thumbnail in the bar itself
+                    Button(action: { onArtworkTap?() }) {
+                        if let img = Image(data: artworkData) {
+                            img
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: 42, height: 42)
+                                .clipShape(RoundedRectangle(cornerRadius: 8))
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel("View artwork")
+                    #endif
                 } else if let station = player.currentStation {
                     StationImageView(station: station)
                         .frame(width: 42, height: 42)
@@ -74,7 +91,8 @@ struct PlayerControlsView: View {
                 .disabled(player.currentStation == nil)
                 .accessibilityLabel(player.isLoading ? "Connecting" : player.isReconnecting ? "Reconnecting" : player.isPlaying ? "Stop" : "Play")
 
-                // Volume
+                // Volume (macOS only — iOS users use hardware volume buttons)
+                #if os(macOS)
                 HStack(spacing: 4) {
                     Button(action: { player.isMuted.toggle() }) {
                         Image(systemName: player.isMuted ? "speaker.slash.fill" : "speaker.fill")
@@ -97,6 +115,7 @@ struct PlayerControlsView: View {
                         .foregroundColor(.rrSecondaryText)
                         .accessibilityHidden(true)
                 }
+                #endif
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 10)
@@ -115,7 +134,7 @@ struct ArtworkModalView: View {
     let availableSize: CGSize
     let onDismiss: () -> Void
 
-    @State private var displayedImage: NSImage?
+    @State private var displayedImage: Image?
     @State private var imageOpacity: Double = 1.0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
@@ -128,7 +147,7 @@ struct ArtworkModalView: View {
         self.stationName = stationName
         self.availableSize = availableSize
         self.onDismiss = onDismiss
-        self._displayedImage = State(initialValue: artworkData.flatMap { NSImage(data: $0) })
+        self._displayedImage = State(initialValue: artworkData.flatMap { Image(data: $0) })
     }
 
     private var artworkDimension: CGFloat {
@@ -141,7 +160,7 @@ struct ArtworkModalView: View {
         VStack(spacing: 0) {
             ZStack {
                 if let img = displayedImage {
-                    Image(nsImage: img)
+                    img
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                 } else if let station = station {
@@ -165,11 +184,11 @@ struct ArtworkModalView: View {
             .onTapGesture { onDismiss() }
             .onChange(of: artworkData) { newData in
                 if reduceMotion {
-                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
                 } else {
                     withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { NSImage(data: $0) }
+                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
                         withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
                     }
                 }
@@ -217,7 +236,11 @@ struct ArtworkModalView: View {
                 .opacity(0)
                 .frame(height: 28)
         }
+        #if os(macOS)
         .frame(width: artworkDimension + 64)
+        #else
+        .frame(maxWidth: .infinity)
+        #endif
         .background(Color.rrBackground)
     }
 

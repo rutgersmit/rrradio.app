@@ -30,7 +30,9 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
     private var reconnectTask: Task<Void, Never>?
     private var metadataOutput: AVPlayerItemMetadataOutput?
     private var artworkFetchTask: Task<Void, Never>?
+    #if os(macOS)
     private var appNapActivity: NSObjectProtocol?
+    #endif
     private var lastArtworkFetchAt: Date?
 
     private let lastStationKey = "lastPlayingStationID"
@@ -54,6 +56,7 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         }
 
         beginAppNapProtectionIfNeeded()
+        activateAudioSessionIfNeeded()
 
         let item = AVPlayerItem(url: url)
         playerItem = item
@@ -253,7 +256,19 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         }
     }
 
-    // MARK: - App Nap prevention
+    // MARK: - Audio session / App Nap
+
+    private func activateAudioSessionIfNeeded() {
+        #if os(iOS)
+        do {
+            let session = AVAudioSession.sharedInstance()
+            try session.setCategory(.playback, mode: .default)
+            try session.setActive(true)
+        } catch {
+            // Non-fatal: AVPlayer will still attempt playback
+        }
+        #endif
+    }
 
     private func beginAppNapProtectionIfNeeded() {
         #if os(macOS)

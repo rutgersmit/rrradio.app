@@ -1,4 +1,9 @@
 import SwiftUI
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
 
 struct AppColors {
     // MARK: - Backgrounds
@@ -46,6 +51,7 @@ extension Color {
     }
 
     init(light: Color, dark: Color) {
+        #if os(macOS)
         self.init(NSColor(name: nil, dynamicProvider: { appearance in
             switch appearance.name {
             case .aqua, .vibrantLight, .accessibilityHighContrastAqua, .accessibilityHighContrastVibrantLight:
@@ -54,5 +60,28 @@ extension Color {
                 return NSColor(dark)
             }
         }))
+        #else
+        self.init(UIColor { traitCollection in
+            switch traitCollection.userInterfaceStyle {
+            case .dark:
+                return UIColor(dark)
+            default:
+                return UIColor(light)
+            }
+        })
+        #endif
+    }
+}
+
+// Cross-platform helper: create a SwiftUI Image from raw Data
+extension Image {
+    init?(data: Data) {
+        #if os(macOS)
+        guard let image = NSImage(data: data) else { return nil }
+        self.init(nsImage: image)
+        #else
+        guard let image = UIImage(data: data) else { return nil }
+        self.init(uiImage: image)
+        #endif
     }
 }

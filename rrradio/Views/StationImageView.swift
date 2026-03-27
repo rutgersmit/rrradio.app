@@ -5,8 +5,8 @@ struct StationImageView: View {
 
     var body: some View {
         if let data = URLSecurityPolicy.boundedLocalImageData(station.localImageData),
-           let nsImage = NSImage(data: data) {
-            Image(nsImage: nsImage)
+           let img = Image(data: data) {
+            img
                 .resizable()
                 .aspectRatio(contentMode: .fill)
         } else if let url = URLSecurityPolicy.safeImageURL(from: station.imageURL) {

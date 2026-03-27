@@ -2,6 +2,8 @@ import Foundation
 import MediaPlayer
 #if os(macOS)
 import AppKit
+#else
+import UIKit
 #endif
 
 @MainActor
@@ -60,6 +62,27 @@ class NowPlayingManager {
                 }
             }
         }
+        #elseif os(iOS)
+        if let data = URLSecurityPolicy.boundedLocalImageData(station.localImageData),
+           let image = UIImage(data: data) {
+            let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
+            info[MPMediaItemPropertyArtwork] = artwork
+            MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+        } else if let url = URLSecurityPolicy.safeImageURL(from: station.imageURL) {
+            Task {
+                if let data = await URLSecurityPolicy.fetchData(
+                    from: url,
+                    timeoutInterval: 8,
+                    maxBytes: URLSecurityPolicy.maxImageBytes,
+                    acceptedMimePrefixes: ["image/"]
+                ),
+                   let image = UIImage(data: data) {
+                    let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
+                    info[MPMediaItemPropertyArtwork] = artwork
+                    MPNowPlayingInfoCenter.default().nowPlayingInfo = info
+                }
+            }
+        }
         #endif
     }
 
@@ -70,6 +93,12 @@ class NowPlayingManager {
         #if os(macOS)
         if let data = URLSecurityPolicy.boundedLocalImageData(artworkData),
            let image = NSImage(data: data) {
+            let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
+            info[MPMediaItemPropertyArtwork] = artwork
+        }
+        #elseif os(iOS)
+        if let data = URLSecurityPolicy.boundedLocalImageData(artworkData),
+           let image = UIImage(data: data) {
             let artwork = MPMediaItemArtwork(boundsSize: CGSize(width: 600, height: 600)) { _ in image }
             info[MPMediaItemPropertyArtwork] = artwork
         }
