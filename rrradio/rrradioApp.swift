@@ -8,13 +8,18 @@ struct rrradioApp: App {
     #endif
 
     var body: some Scene {
-        WindowGroup {
+        WindowGroup(id: "main") {
             ContentView()
         }
         .windowStyle(.titleBar)
         .windowToolbarStyle(.unified)
         .commands {
             CommandGroup(replacing: .newItem) {}
+            #if os(macOS)
+            CommandGroup(after: .windowArrangement) {
+                ShowMainWindowButton()
+            }
+            #endif
         }
 
         #if os(macOS)
@@ -27,6 +32,30 @@ struct rrradioApp: App {
         #endif
     }
 }
+
+// MARK: - Window Commands
+
+#if os(macOS)
+private func showOrOpenMainWindow(openWindow: OpenWindowAction) {
+    if let window = NSApp.windows.first(where: { $0.canBecomeMain }) {
+        window.makeKeyAndOrderFront(nil)
+        NSApp.activate(ignoringOtherApps: true)
+    } else {
+        openWindow(id: "main")
+        NSApp.activate(ignoringOtherApps: true)
+    }
+}
+
+private struct ShowMainWindowButton: View {
+    @Environment(\.openWindow) private var openWindow
+
+    var body: some View {
+        Button("Show rrradio") {
+            showOrOpenMainWindow(openWindow: openWindow)
+        }
+    }
+}
+#endif
 
 // MARK: - Menu Bar Icon
 
@@ -62,6 +91,7 @@ private extension NSImage {
 
 struct MenuBarView: View {
     @ObservedObject var player = AudioPlayerManager.shared
+    @Environment(\.openWindow) private var openWindow
 
     var body: some View {
         VStack(alignment: .leading, spacing: 4) {
@@ -79,6 +109,10 @@ struct MenuBarView: View {
                 player.togglePlayPause()
             }
             .disabled(player.currentStation == nil)
+
+            Button("Show rrradio") {
+                showOrOpenMainWindow(openWindow: openWindow)
+            }
 
             Divider()
 
@@ -103,6 +137,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         false // Keep running when window is closed
+    }
+
+    func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows: Bool) -> Bool {
+        if !hasVisibleWindows {
+            sender.windows.first { $0.canBecomeMain }?.makeKeyAndOrderFront(nil)
+        }
+        return true
     }
 }
 #endif
