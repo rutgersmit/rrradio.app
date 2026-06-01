@@ -5,6 +5,7 @@ import UserNotifications
 struct StationListView: View {
     @ObservedObject var store: StationStore
     @ObservedObject var player: AudioPlayerManager
+    var bottomInset: CGFloat = 0
 
     @State private var showAddSheet = false
     @State private var editingStation: RadioStation?
@@ -19,14 +20,12 @@ struct StationListView: View {
     private let spacing: CGFloat = 14
 
     var body: some View {
-        GeometryReader { geo in
-            ScrollView {
-                let cols = max(2, Int(geo.size.width / (minCardWidth + spacing)))
-                let columns = Array(repeating: GridItem(.flexible(), spacing: spacing), count: cols)
+        ScrollView {
+            let columns = [GridItem(.adaptive(minimum: minCardWidth), spacing: spacing)]
 
-                LazyVGrid(columns: columns, spacing: spacing) {
-                    ForEach(store.stations) { station in
-                        StationCardView(
+            LazyVGrid(columns: columns, spacing: spacing) {
+                ForEach(store.stations) { station in
+                    StationCardView(
                             station: station,
                             isPlaying: player.currentStation?.id == station.id && player.isPlaying,
                             isLoading: player.currentStation?.id == station.id && player.isLoading,
@@ -64,8 +63,8 @@ struct StationListView: View {
                         }
                     }
                 }
-                .padding(spacing)
-            }
+            .padding(spacing)
+            .padding(.bottom, bottomInset)
         }
         .background(.clear)
         .background(stationShortcuts)

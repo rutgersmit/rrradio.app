@@ -1,10 +1,18 @@
 import SwiftUI
 
+struct PlayerBarHeightKey: PreferenceKey {
+    static var defaultValue: CGFloat = 0
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = max(value, nextValue())
+    }
+}
+
 struct ContentView: View {
     @StateObject private var store = StationStore()
     @StateObject private var player = AudioPlayerManager.shared
     @State private var showArtworkModal = false
     @State private var modalArtworkData: Data? = nil
+    @State private var playerBarHeight: CGFloat = 0
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
@@ -94,7 +102,7 @@ struct ContentView: View {
         }
         #else
         NavigationStack {
-            StationListView(store: store, player: player)
+            StationListView(store: store, player: player, bottomInset: playerBarHeight)
                 .navigationTitle("rrradio")
                 .navigationBarTitleDisplayMode(.large)
         }
@@ -103,7 +111,13 @@ struct ContentView: View {
                 modalArtworkData = player.currentArtworkData
                 showArtworkModal = true
             })
+            .background(
+                GeometryReader { geo in
+                    Color.clear.preference(key: PlayerBarHeightKey.self, value: geo.size.height)
+                }
+            )
         }
+        .onPreferenceChange(PlayerBarHeightKey.self) { playerBarHeight = $0 }
         #endif
     }
 
