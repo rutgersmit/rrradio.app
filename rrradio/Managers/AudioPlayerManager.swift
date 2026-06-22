@@ -39,7 +39,31 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
 
     private override init() {
         super.init()
+        observeAudioRouteChanges()
     }
+
+    private func observeAudioRouteChanges() {
+        #if os(iOS)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(handleRouteChange(_:)),
+            name: AVAudioSession.routeChangeNotification,
+            object: nil
+        )
+        #endif
+    }
+
+    #if os(iOS)
+    @objc nonisolated private func handleRouteChange(_ notification: Notification) {
+        guard let info = notification.userInfo,
+              let reasonValue = info[AVAudioSessionRouteChangeReasonKey] as? UInt,
+              let reason = AVAudioSession.RouteChangeReason(rawValue: reasonValue),
+              reason == .oldDeviceUnavailable else { return }
+        // The previous output device (e.g. AirPods) went away — placed in the
+        // case, unplugged, etc. Stop playback; never resume automatically.
+        Task { @MainActor in self.stop() }
+    }
+    #endif
 
     // MARK: - Playback
 
@@ -141,6 +165,21 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         } else if let station = currentStation {
             play(station: station)
         }
+    }
+
+    /// Explicit play command (e.g. from MPRemoteCommandCenter.playCommand).
+    /// Only starts playback — never stops it.
+    func resume() {
+        guard !isPlaying, !isReconnecting, let station = currentStation else { return }
+        play(station: station)
+    }
+
+    /// Explicit pause command (e.g. from MPRemoteCommandCenter.pauseCommand or
+    /// an audio-route change such as AirPods being placed in their case).
+    /// Only stops playback — never starts it.
+    func pause() {
+        guard isPlaying || isReconnecting else { return }
+        stop()
     }
 
     func lastPlayedStationID() -> UUID? {
