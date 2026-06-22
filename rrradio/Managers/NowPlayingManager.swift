@@ -10,6 +10,8 @@ import UIKit
 class NowPlayingManager {
     static let shared = NowPlayingManager()
 
+    private var onPlay: (() -> Void)?
+    private var onPause: (() -> Void)?
     private var onPlayPause: (() -> Void)?
     private var onNext: (() -> Void)?
     private var onPrevious: (() -> Void)?
@@ -19,10 +21,14 @@ class NowPlayingManager {
     }
 
     func configure(
+        onPlay: @escaping () -> Void,
+        onPause: @escaping () -> Void,
         onPlayPause: @escaping () -> Void,
         onNext: @escaping () -> Void,
         onPrevious: @escaping () -> Void
     ) {
+        self.onPlay = onPlay
+        self.onPause = onPause
         self.onPlayPause = onPlayPause
         self.onNext = onNext
         self.onPrevious = onPrevious
@@ -116,11 +122,11 @@ class NowPlayingManager {
         let center = MPRemoteCommandCenter.shared()
 
         center.playCommand.addTarget { [weak self] _ in
-            self?.onPlayPause?()
+            self?.onPlay?()
             return .success
         }
         center.pauseCommand.addTarget { [weak self] _ in
-            self?.onPlayPause?()
+            self?.onPause?()
             return .success
         }
         center.togglePlayPauseCommand.addTarget { [weak self] _ in
