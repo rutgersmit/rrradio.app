@@ -268,7 +268,14 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
                 return
             }
 
-            let preferred = results.first { ($0["collectionType"] as? String) == "Single" } ?? results[0]
+            // iTunes returns the *album* artwork for a song. A track released as a
+            // single lives in a collection named "<Title> - Single", whose artwork
+            // is the single's own cover — prefer that over the album version.
+            let preferred = results.first { result in
+                guard let collection = (result["collectionName"] as? String)?.lowercased()
+                else { return false }
+                return collection.hasSuffix("- single")
+            } ?? results[0]
             guard let artworkUrl = preferred["artworkUrl100"] as? String else {
                 self.currentArtworkData = nil
                 if let s = self.currentStation, let t = self.currentSongTitle {

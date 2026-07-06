@@ -333,6 +333,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEVELOPMENT_TEAM = 733426JK8V;
 				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = rrradio;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
@@ -358,6 +359,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 733426JK8V;
 				INFOPLIST_FILE = "rrradio/Info-iOS.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = rrradio;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = nl.rrradio.app.ios;
@@ -375,8 +377,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -412,8 +414,8 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGNING_REQUIRED = NO;
+				CODE_SIGN_ENTITLEMENTS = rrradio/rrradio.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;

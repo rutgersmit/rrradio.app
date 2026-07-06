@@ -88,6 +88,7 @@ struct PlayerControlsView: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .focusable(false)
                 .disabled(player.currentStation == nil)
                 .accessibilityLabel(player.isLoading ? "Connecting" : player.isReconnecting ? "Reconnecting" : player.isPlaying ? "Stop" : "Play")
 
@@ -249,17 +250,26 @@ struct ArtworkModalView: View {
         return query.isEmpty ? nil : query
     }
 
+    // `.urlQueryAllowed` leaves reserved sub-delimiters like `&`, `+`, `=`, `/`,
+    // `?` and `#` untouched, so an artist such as "Placebo & David Bowie" would
+    // break the query string (the `&` starts a new parameter). Encode those too.
+    private static let searchQueryAllowed: CharacterSet = {
+        var allowed = CharacterSet.urlQueryAllowed
+        allowed.remove(charactersIn: "&+=?/#")
+        return allowed
+    }()
+
+    private var encodedSearchQuery: String? {
+        searchQuery?.addingPercentEncoding(withAllowedCharacters: Self.searchQueryAllowed)
+    }
+
     private var spotifyURL: URL? {
-        guard let q = searchQuery,
-              let encoded = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        else { return nil }
+        guard let encoded = encodedSearchQuery else { return nil }
         return URL(string: "https://open.spotify.com/search/\(encoded)")
     }
 
     private var youtubeURL: URL? {
-        guard let q = searchQuery,
-              let encoded = q.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
-        else { return nil }
+        guard let encoded = encodedSearchQuery else { return nil }
         return URL(string: "https://www.youtube.com/results?search_query=\(encoded)")
     }
 
