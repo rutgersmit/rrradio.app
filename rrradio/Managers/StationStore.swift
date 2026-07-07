@@ -118,7 +118,8 @@ class StationStore: ObservableObject {
             streamURL: streamURL,
             imageURL: imageURL,
             localImageData: URLSecurityPolicy.boundedLocalImageData(station.localImageData),
-            isDefault: station.isDefault
+            isDefault: station.isDefault,
+            padImage: station.padImage
         )
     }
 }

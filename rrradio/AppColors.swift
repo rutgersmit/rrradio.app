@@ -33,6 +33,11 @@ extension Color {
         Color(light: Color(red: 1, green: 1, blue: 1),
               dark: Color(red: 0.15, green: 0.15, blue: 0.25))
     }
+    /// Backdrop behind artwork that opts in to a margin — kept light in both
+    /// modes so logos designed for a white background stay legible.
+    static var rrImageMargin: Color {
+        Color(light: .white, dark: Color(white: 0.92))
+    }
     static var rrPlayer: Color {
         Color(light: Color(red: 0.92, green: 0.92, blue: 0.96),
               dark: Color(red: 0.08, green: 0.08, blue: 0.15))

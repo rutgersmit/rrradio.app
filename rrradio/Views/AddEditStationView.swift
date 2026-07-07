@@ -13,6 +13,7 @@ struct AddEditStationView: View {
     @State private var name: String = ""
     @State private var streamURL: String = ""
     @State private var localImageData: Data? = nil
+    @State private var padImage: Bool = false
 
     @State private var pickedImage: CGImage? = nil
     @State private var showCrop = false
@@ -54,6 +55,18 @@ struct AddEditStationView: View {
     }
     private var canSave: Bool {
         !trimmedName.isEmpty && normalizedStreamURL != nil
+    }
+    private var hasImage: Bool {
+        localImageData != nil || !(existing?.imageURL.isEmpty ?? true)
+    }
+    private var previewStation: RadioStation {
+        RadioStation(
+            name: trimmedName,
+            streamURL: "https://example.com",
+            imageURL: existing?.imageURL ?? "",
+            localImageData: localImageData,
+            padImage: padImage
+        )
     }
 
     var body: some View {
@@ -114,18 +127,19 @@ struct AddEditStationView: View {
                     } else {
                         chooseImageButton
                     }
+
+                    if hasImage {
+                        Toggle("Add margin around image", isOn: $padImage)
+                    }
                 }
 
                 // Preview
-                if let data = localImageData, let img = Image(data: data) {
+                if hasImage {
                     Section("Preview") {
                         HStack {
-                            img
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                            StationImageView(station: previewStation)
                                 .frame(width: 60, height: 60)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
-                                .clipped()
 
                             Text(name.isEmpty ? "Station name" : name)
                                 .font(.headline)
@@ -152,7 +166,8 @@ struct AddEditStationView: View {
                         streamURL: safeStreamURL,
                         imageURL: existing?.imageURL ?? "",
                         localImageData: URLSecurityPolicy.boundedLocalImageData(localImageData),
-                        isDefault: existing?.isDefault ?? false
+                        isDefault: existing?.isDefault ?? false,
+                        padImage: padImage
                     )
                     onSave(station)
                     dismiss()
@@ -198,6 +213,7 @@ struct AddEditStationView: View {
                 name = station.name
                 streamURL = station.streamURL
                 localImageData = station.localImageData
+                padImage = station.padImage
             }
             focusedField = .name
         }
