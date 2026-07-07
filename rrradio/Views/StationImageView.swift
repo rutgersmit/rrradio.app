@@ -3,19 +3,15 @@ import SwiftUI
 struct StationImageView: View {
     let station: RadioStation
 
-    /// Fraction of the tile's smaller side used as padding when a margin is enabled.
-    private let marginFraction: CGFloat = 0.14
+    /// Padding, in points, applied around the artwork when a margin is enabled.
+    var margin: CGFloat = 40
 
     var body: some View {
         if station.padImage {
-            GeometryReader { geo in
-                let inset = min(geo.size.width, geo.size.height) * marginFraction
-                ZStack {
-                    Color.rrImageMargin
-                    artwork(contentMode: .fit)
-                        .padding(inset)
-                }
-                .frame(width: geo.size.width, height: geo.size.height)
+            ZStack {
+                Color.rrImageMargin
+                artwork(contentMode: .fit)
+                    .padding(margin)
             }
         } else {
             artwork(contentMode: .fill)

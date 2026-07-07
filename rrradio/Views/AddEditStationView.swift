@@ -137,7 +137,8 @@ struct AddEditStationView: View {
                 if hasImage {
                     Section("Preview") {
                         HStack {
-                            StationImageView(station: previewStation)
+                            // Preview is 60pt vs. a ~160pt tile, so scale the 40pt margin to match.
+                            StationImageView(station: previewStation, margin: 40 * 60 / 160)
                                 .frame(width: 60, height: 60)
                                 .clipShape(RoundedRectangle(cornerRadius: 8))
 
