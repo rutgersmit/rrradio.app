@@ -34,6 +34,7 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
     private var appNapActivity: NSObjectProtocol?
     #endif
     private var lastArtworkFetchAt: Date?
+    private var lastArtworkTitle: String?
 
     private let lastStationKey = "lastPlayingStationID"
 
@@ -140,6 +141,7 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
         currentArtist = nil
         currentTrack = nil
         currentArtworkData = nil
+        lastArtworkTitle = nil
         endAppNapProtectionIfNeeded()
         if let s = currentStation { NowPlayingManager.shared.update(station: s, isPlaying: false) }
     }
@@ -221,30 +223,44 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
             }
 
             if let t = title, let s = self.currentStation {
-                self.fetchArtwork(for: t)
+                self.fetchArtwork(artist: self.currentArtist, track: self.currentTrack, rawTitle: t)
                 NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: self.currentArtworkData)
             } else {
                 self.artworkFetchTask?.cancel()
+                self.lastArtworkTitle = nil
                 self.currentArtworkData = nil
             }
         }
     }
 
-    private func fetchArtwork(for title: String) {
+    private func fetchArtwork(artist: String?, track: String?, rawTitle: String) {
+        // Skip if the song hasn't changed since the last fetch.
+        if rawTitle == lastArtworkTitle { return }
+
         let now = Date()
         if let lastArtworkFetchAt,
            now.timeIntervalSince(lastArtworkFetchAt) < 2 {
             return
         }
         lastArtworkFetchAt = now
+        lastArtworkTitle = rawTitle
+
+        // Search on the parsed "artist track" when available (no dash — it only
+        // dilutes iTunes' matching); fall back to the raw title otherwise.
+        let term: String
+        if let artist, !artist.isEmpty, let track, !track.isEmpty {
+            term = "\(artist) \(track)"
+        } else {
+            term = rawTitle
+        }
 
         artworkFetchTask?.cancel()
         artworkFetchTask = Task {
             var components = URLComponents(string: "https://itunes.apple.com/search")
             components?.queryItems = [
-                URLQueryItem(name: "term", value: title),
+                URLQueryItem(name: "term", value: term),
                 URLQueryItem(name: "entity", value: "song"),
-                URLQueryItem(name: "limit", value: "5")
+                URLQueryItem(name: "limit", value: "25")
             ]
 
             guard let url = components?.url,
@@ -261,26 +277,27 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
                   let results = json["results"] as? [[String: Any]],
                   !results.isEmpty
             else {
-                self.currentArtworkData = nil
-                if let s = self.currentStation, let t = self.currentSongTitle {
-                    NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: nil)
-                }
+                self.clearArtwork()
                 return
             }
 
-            // iTunes returns the *album* artwork for a song. A track released as a
-            // single lives in a collection named "<Title> - Single", whose artwork
-            // is the single's own cover — prefer that over the album version.
-            let preferred = results.first { result in
-                guard let collection = (result["collectionName"] as? String)?.lowercased()
-                else { return false }
-                return collection.hasSuffix("- single")
-            } ?? results[0]
-            guard let artworkUrl = preferred["artworkUrl100"] as? String else {
-                self.currentArtworkData = nil
-                if let s = self.currentStation, let t = self.currentSongTitle {
-                    NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: nil)
-                }
+            // iTunes fuzzy-matches loosely, so verify each result against the
+            // parsed artist/track and reject mismatches — better no artwork than
+            // the wrong cover. Among the matches, the "- Single" collection carries
+            // the single's own cover, preferred over an album/compilation version.
+            let candidates = results.map { result -> ArtworkMatcher.Candidate in
+                let collection = (result["collectionName"] as? String)?.lowercased() ?? ""
+                return ArtworkMatcher.Candidate(
+                    artist: result["artistName"] as? String ?? "",
+                    track: result["trackName"] as? String ?? "",
+                    isSingle: collection.hasSuffix("- single")
+                )
+            }
+            guard let index = ArtworkMatcher.bestMatchIndex(
+                    artist: artist, track: track, rawTitle: rawTitle, candidates: candidates),
+                  let artworkUrl = results[index]["artworkUrl100"] as? String
+            else {
+                self.clearArtwork()
                 return
             }
 
@@ -299,6 +316,14 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
             if let s = self.currentStation, let t = self.currentSongTitle {
                 NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: imageData)
             }
+        }
+    }
+
+    /// Drop the song artwork so the station's own image is shown instead.
+    private func clearArtwork() {
+        currentArtworkData = nil
+        if let s = currentStation, let t = currentSongTitle {
+            NowPlayingManager.shared.updateSongTitle(t, station: s, artworkData: nil)
         }
     }
 
@@ -333,5 +358,82 @@ class AudioPlayerManager: NSObject, ObservableObject, AVPlayerItemMetadataOutput
             self.appNapActivity = nil
         }
         #endif
+    }
+}
+
+// MARK: - Artwork matching
+
+/// Verifies iTunes search results against the parsed artist/track of the playing
+/// song so the wrong cover (a loose fuzzy hit) is rejected rather than displayed.
+enum ArtworkMatcher {
+    /// An iTunes result reduced to the fields used for matching.
+    struct Candidate {
+        let artist: String
+        let track: String
+        /// Whether the result lives in a "<Title> - Single" collection, whose
+        /// artwork is the single's own cover.
+        let isSingle: Bool
+    }
+
+    /// Minimum token-overlap score (0...1) an artist and a track must each reach
+    /// when the metadata was split into artist + track.
+    static let fieldThreshold = 0.5
+    /// Minimum score when only a single unsplit string is available and it must
+    /// be matched against the combined "artist track" of a candidate.
+    static let combinedThreshold = 0.6
+
+    /// Index of the best-matching candidate, or nil if none clear the threshold.
+    static func bestMatchIndex(artist: String?, track: String?, rawTitle: String,
+                               candidates: [Candidate]) -> Int? {
+        let haveParsed = (artist?.isEmpty == false) && (track?.isEmpty == false)
+        var best: (index: Int, score: Double)?
+
+        for (i, c) in candidates.enumerated() {
+            let score: Double
+            if haveParsed {
+                let artistScore = similarity(artist!, c.artist)
+                let trackScore = similarity(track!, c.track)
+                guard artistScore >= fieldThreshold, trackScore >= fieldThreshold else { continue }
+                score = artistScore + trackScore
+            } else {
+                let combinedScore = similarity(rawTitle, "\(c.artist) \(c.track)")
+                guard combinedScore >= combinedThreshold else { continue }
+                score = combinedScore
+            }
+            // A single's cover breaks ties but never outranks a better match.
+            let ranked = score + (c.isSingle ? 0.01 : 0)
+            if best == nil || ranked > best!.score {
+                best = (i, ranked)
+            }
+        }
+        return best?.index
+    }
+
+    /// F1 of the token overlap between two strings (0 = disjoint, 1 = identical).
+    static func similarity(_ a: String, _ b: String) -> Double {
+        let ta = tokens(a), tb = tokens(b)
+        guard !ta.isEmpty, !tb.isEmpty else { return 0 }
+        let intersection = Double(ta.intersection(tb).count)
+        guard intersection > 0 else { return 0 }
+        let precision = intersection / Double(tb.count)
+        let recall = intersection / Double(ta.count)
+        return 2 * precision * recall / (precision + recall)
+    }
+
+    private static let noise: Set<String> = ["feat", "ft", "featuring", "with"]
+
+    /// Normalized, de-noised set of word tokens.
+    static func tokens(_ s: String) -> Set<String> {
+        Set(normalize(s).split(separator: " ").map(String.init)).subtracting(noise)
+    }
+
+    /// Lowercase, drop bracketed segments and diacritics, strip punctuation.
+    static func normalize(_ s: String) -> String {
+        var t = s.lowercased()
+        t = t.replacingOccurrences(of: "\\([^)]*\\)", with: " ", options: .regularExpression)
+        t = t.replacingOccurrences(of: "\\[[^\\]]*\\]", with: " ", options: .regularExpression)
+        t = t.folding(options: .diacriticInsensitive, locale: nil)
+        t = t.replacingOccurrences(of: "[^a-z0-9]+", with: " ", options: .regularExpression)
+        return t.trimmingCharacters(in: .whitespaces)
     }
 }
