@@ -3,8 +3,10 @@ import SwiftUI
 struct StationImageView: View {
     let station: RadioStation
 
-    /// Fraction of the tile's smaller side used as padding when a margin is enabled.
-    private let marginFraction: CGFloat = 0.14
+    /// Margin as a fraction of the tile's smaller side, matching a 40px inset on
+    /// the 512×512 artwork canvas (40 / 512). Kept relative so it scales with the
+    /// tile at any size rather than looking oversized on small tiles.
+    private let marginFraction: CGFloat = 40.0 / 512.0
 
     var body: some View {
         if station.padImage {
