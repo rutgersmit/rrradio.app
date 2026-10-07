@@ -270,6 +270,11 @@ struct ArtworkModalView: View {
         .padding(.top, 32)
         .padding(.horizontal, 24)
         .onTapGesture { onDismiss() }
+        .onAppear {
+            if displayedImage == nil {
+                displayedImage = URLSecurityPolicy.boundedLocalImageData(artworkData).flatMap { Image(data: $0) }
+            }
+        }
         .onChange(of: artworkData) { newData in
             if reduceMotion {
                 displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
