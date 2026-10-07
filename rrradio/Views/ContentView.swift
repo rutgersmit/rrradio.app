@@ -35,8 +35,11 @@ struct ContentView: View {
             #if os(iOS)
             .sheet(isPresented: $showArtworkModal) {
                 GeometryReader { geo in
+                    // Read the player directly: `modalArtworkData` isn't read
+                    // elsewhere in the iOS body, so the sheet closure would see
+                    // a stale (nil) value and fall back to the station logo.
                     ArtworkModalView(
-                        artworkData: modalArtworkData,
+                        artworkData: player.currentArtworkData,
                         station: player.currentStation,
                         songTitle: player.currentSongTitle,
                         artist: player.currentArtist,
