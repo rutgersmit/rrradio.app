@@ -152,98 +152,159 @@ struct ArtworkModalView: View {
     }
 
     private var artworkDimension: CGFloat {
+        #if os(iOS)
+        let fromWidth = availableSize.width - 48
+        let fromHeight = availableSize.height * 0.55
+        #else
         let fromWidth = availableSize.width * 0.75
         let fromHeight = availableSize.height * 0.60
-        return min(min(fromWidth, fromHeight), 800).rounded()
+        #endif
+        return max(min(min(fromWidth, fromHeight), 800), 0).rounded()
     }
+
+    #if os(iOS)
+    private let titleSize: CGFloat = 22
+    private let artistSize: CGFloat = 17
+    private let stationSize: CGFloat = 13
+    private let linkSize: CGFloat = 15
+    #else
+    private let titleSize: CGFloat = 16
+    private let artistSize: CGFloat = 13
+    private let stationSize: CGFloat = 11
+    private let linkSize: CGFloat = 13
+    #endif
 
     var body: some View {
         VStack(spacing: 0) {
-            ZStack {
-                if let img = displayedImage {
-                    img
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                } else if let station = station {
-                    StationImageView(station: station)
-                        .aspectRatio(contentMode: .fit)
-                } else {
-                    RoundedRectangle(cornerRadius: 12)
-                        .fill(Color.rrCard)
-                        .overlay(
-                            Image(systemName: "radio")
-                                .font(.system(size: 48))
-                                .foregroundColor(.rrSecondaryText)
-                        )
-                }
-            }
-            .frame(width: artworkDimension, height: artworkDimension)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .opacity(imageOpacity)
-            .padding(.top, 32)
-            .padding(.horizontal, 32)
-            .onTapGesture { onDismiss() }
-            .onChange(of: artworkData) { newData in
-                if reduceMotion {
-                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
-                } else {
-                    withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                        displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
-                        withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
-                    }
-                }
-            }
+            #if os(iOS)
+            Spacer(minLength: 24)
+            #endif
+
+            artwork
 
             VStack(spacing: 4) {
                 Text(track ?? "\u{00A0}")
-                    .font(.system(size: 16, weight: .semibold))
+                    .font(.system(size: titleSize, weight: .semibold))
                     .foregroundColor(.rrPrimaryText)
                     .lineLimit(2)
                     .multilineTextAlignment(.center)
 
                 Text(artist ?? songTitle ?? "\u{00A0}")
-                    .font(.system(size: 13))
+                    .font(.system(size: artistSize))
                     .foregroundColor(.rrSecondaryText)
                     .lineLimit(1)
 
                 Text(stationName ?? "\u{00A0}")
-                    .font(.system(size: 11))
-                    .foregroundColor(.rrSecondaryText.opacity(0.6))
+                    .font(.system(size: stationSize, weight: .medium))
+                    .foregroundColor(.rrSecondaryText.opacity(0.7))
+                    .textCase(.uppercase)
                     .padding(.top, 2)
             }
-            .padding(.top, 20)
+            .padding(.top, 24)
             .padding(.horizontal, 32)
 
             if let spotifyDestination = spotifyURL ?? defaultSpotifyURL,
                let youtubeDestination = youtubeURL ?? defaultYouTubeURL {
-                HStack(spacing: 16) {
+                HStack(spacing: 12) {
                     Link(destination: spotifyDestination) {
                         Label("Spotify", systemImage: "music.note")
-                            .font(.system(size: 13))
+                            .font(.system(size: linkSize, weight: .medium))
+                            .modifier(LinkPillStyle())
                     }
                     Link(destination: youtubeDestination) {
                         Label("YouTube", systemImage: "play.rectangle")
-                            .font(.system(size: 13))
+                            .font(.system(size: linkSize, weight: .medium))
+                            .modifier(LinkPillStyle())
                     }
                 }
                 .opacity(spotifyURL != nil || youtubeURL != nil ? 1 : 0)
                 .allowsHitTesting(spotifyURL != nil || youtubeURL != nil)
-                .padding(.top, 12)
+                .padding(.top, 20)
             }
 
+            #if os(iOS)
+            Spacer(minLength: 24)
+            Spacer(minLength: 0)
+            #else
+            Color.clear.frame(height: 28)
+            #endif
+        }
+        .background {
             Button("") { onDismiss() }
                 .keyboardShortcut(.escape, modifiers: [])
                 .opacity(0)
-                .frame(height: 28)
         }
         #if os(macOS)
         .frame(width: artworkDimension + 64)
-        #else
-        .frame(maxWidth: .infinity)
-        #endif
         .background(Color.rrBackground)
+        #else
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background { backdrop }
+        .presentationDragIndicator(.visible)
+        #endif
     }
+
+    private var artwork: some View {
+        ZStack {
+            if let img = displayedImage {
+                img
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+            } else if let station = station {
+                StationImageView(station: station)
+                    .aspectRatio(contentMode: .fit)
+            } else {
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color.rrCard)
+                    .overlay(
+                        Image(systemName: "radio")
+                            .font(.system(size: 48))
+                            .foregroundColor(.rrSecondaryText)
+                    )
+            }
+        }
+        .frame(width: artworkDimension, height: artworkDimension)
+        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .shadow(color: .black.opacity(0.25), radius: 20, y: 10)
+        .opacity(imageOpacity)
+        .padding(.top, 32)
+        .padding(.horizontal, 24)
+        .onTapGesture { onDismiss() }
+        .onChange(of: artworkData) { newData in
+            if reduceMotion {
+                displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
+            } else {
+                withAnimation(.easeOut(duration: 0.2)) { imageOpacity = 0 }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    displayedImage = URLSecurityPolicy.boundedLocalImageData(newData).flatMap { Image(data: $0) }
+                    withAnimation(.easeIn(duration: 0.25)) { imageOpacity = 1 }
+                }
+            }
+        }
+    }
+
+    #if os(iOS)
+    /// Full-bleed backdrop: the app background tinted by a heavily blurred
+    /// copy of the artwork, so the sheet has no bare white area below the
+    /// content.
+    private var backdrop: some View {
+        ZStack {
+            Color.rrBackground
+            if let img = displayedImage {
+                Color.clear
+                    .overlay {
+                        img
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .blur(radius: 60)
+                    }
+                    .clipped()
+                    .opacity(0.35 * imageOpacity)
+            }
+        }
+        .ignoresSafeArea()
+    }
+    #endif
 
     private var searchQuery: String? {
         let query = [artist, track].compactMap { $0 }.joined(separator: " ")
@@ -279,5 +340,14 @@ struct ArtworkModalView: View {
 
     private var defaultYouTubeURL: URL? {
         URL(string: "https://www.youtube.com")
+    }
+}
+
+private struct LinkPillStyle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .padding(.horizontal, 14)
+            .padding(.vertical, 8)
+            .background(Capsule().fill(Color.rrCard.opacity(0.7)))
     }
 }
